@@ -1,0 +1,74 @@
+﻿<Application
+    x:Class="Dodo.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Dodo"
+    xmlns:localData="using:Dodo.Data">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- 
+                    Styles that define common aspects of the platform look and feel
+                    Required by Visual Studio project and item templates
+                 -->
+                <ResourceDictionary Source="Common/StandardStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Application-specific resources -->
+
+            <SolidColorBrush x:Key="Background" Color="#FF067979"/>
+            <SolidColorBrush x:Key="BackgroundSecondary">#CAFCD8</SolidColorBrush>
+            <SolidColorBrush x:Key="AlternativeBackground">#F7E967</SolidColorBrush>
+            <SolidColorBrush x:Key="Something">#A9CF54</SolidColorBrush>
+            <SolidColorBrush x:Key="SomethingElse">#588F27</SolidColorBrush>
+
+            <x:String x:Key="AppName">Dodo</x:String>
+            <DataTemplate x:Key="MenuItemTemplate">
+                <Grid Height="60" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource SomethingElse}" Width="60" Height="60">
+                        <TextBlock Text="{Binding Count}" FontFamily="Segoe UI Light" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap" FontSize="24" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Column="1" Margin="10,0" FontFamily="Segoe UI Light" FontWeight="Normal"/>
+                </Grid>
+            </DataTemplate>
+
+			 <DataTemplate x:Key="TweetItemTemplate">
+                <Grid Width="480" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource Something}" Width="60" Height="60" VerticalAlignment="Top">
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="{Binding Avatar}" />
+                            </Image.Source>
+                        </Image>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Top" Orientation="Vertical">
+                        <TextBlock Text="{Binding Author}"
+                                   Margin="0,0,4,0"
+                                   Style="{StaticResource TitleTextStyle}" 
+                                   TextWrapping="NoWrap" 
+                                   FontSize="18" 
+                                   FontFamily="Segoe UI Light" 
+                                   FontWeight="Bold"/>
+                        <TextBlock Style="{StaticResource TitleTextStyle}" 
+                                   TextWrapping="Wrap"
+                                   FontSize="18" 
+                                   TextTrimming="None"
+                                   FontFamily="Segoe UI Light"
+                                   FontWeight="Normal"
+                                   Text="{Binding Text}"/>
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
