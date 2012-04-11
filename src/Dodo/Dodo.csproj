@@ -241,6 +241,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\caliburn.micro\src\Caliburn.Micro.WinRT.Extensions\Caliburn.Micro.WinRT.Extensions.csproj">
+      <Project>{e5718a59-1466-4b36-ba76-f596f550b19b}</Project>
+      <Name>Caliburn.Micro.WinRT.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\caliburn.micro\src\Caliburn.Micro.WinRT\Caliburn.Micro.WinRT.csproj">
+      <Project>{fdbdc52d-6a55-4531-9899-a5dcb0e09f15}</Project>
+      <Name>Caliburn.Micro.WinRT</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoxKite\BoxKite.csproj">
       <Project>{5c1cf862-b5e7-40d3-9bdb-bb2a0ba4623d}</Project>
       <Name>BoxKite</Name>

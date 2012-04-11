@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using BoxKite.Models;
 using Dodo.Logic.Shared;
 
 namespace Dodo.DataModel

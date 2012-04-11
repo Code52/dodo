@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using BoxKite;
-using Dodo.Logic.Services;
+using BoxKite.Models;
 using Dodo.Logic.Shared;
 using Windows.Security.Authentication.Web;
 using Windows.UI.Core;
+using BindableBase = Dodo.Logic.Shared.BindableBase;
 
 namespace Dodo
 {
@@ -35,7 +36,9 @@ namespace Dodo
         {
             _tasks.Add(new UserTask { Title = "Sign In", Command = new DelegateCommand(StartOAuthFlow) });
 
-            _twitter.GetSampleTweets().Subscribe(OnNext);
+            _twitter.GetSession()
+                    .SearchFor("twitter")
+                    .Subscribe(OnNext);
         }
 
         private async void StartOAuthFlow()

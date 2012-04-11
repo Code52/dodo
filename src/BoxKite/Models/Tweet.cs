@@ -1,4 +1,4 @@
-﻿namespace Dodo.Logic.Shared
+﻿namespace BoxKite.Models
 {
     public class Tweet : BindableBase
     {

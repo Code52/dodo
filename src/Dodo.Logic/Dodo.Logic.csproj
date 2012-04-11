@@ -114,16 +114,10 @@
   <ItemGroup>
     <Compile Include="Shared\BindableBase.cs" />
     <Compile Include="Shared\DelegateCommand.cs" />
-    <Compile Include="Services\ITwitterService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shared\Tweet.cs" />
-    <Compile Include="Services\TwitterService.cs" />
     <Compile Include="Shared\UserTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\winrt45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Reactive.Core">
       <HintPath>..\packages\Rx-Core.2.0.20304-beta\lib\WinRT45\System.Reactive.Core.dll</HintPath>
     </Reference>
@@ -140,9 +134,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
