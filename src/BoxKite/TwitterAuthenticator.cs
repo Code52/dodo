@@ -6,7 +6,7 @@ using Windows.Security.Authentication.Web;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 
-namespace Dodo.Logic.Services
+namespace BoxKite
 {
     public class TwitterAuthenticator
     {

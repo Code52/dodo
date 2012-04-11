@@ -241,6 +241,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoxKite\BoxKite.csproj">
+      <Project>{5c1cf862-b5e7-40d3-9bdb-bb2a0ba4623d}</Project>
+      <Name>BoxKite</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dodo.Logic\Dodo.Logic.csproj">
       <Project>{629e961b-5ebd-4ccb-b9fa-aac39dc8c0e3}</Project>
       <Name>Dodo.Logic</Name>

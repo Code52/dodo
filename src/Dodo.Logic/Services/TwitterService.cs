@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Dodo.Logic.Models;
+using BoxKite.Models;
 using Dodo.Logic.Shared;
 using Newtonsoft.Json;
 
@@ -30,7 +30,7 @@ namespace Dodo.Logic.Services
             var reader = new StreamReader(stream);
             var content = reader.ReadToEnd();
 
-            var objects = JsonConvert.DeserializeObject<RootObject>(content);
+            var objects = JsonConvert.DeserializeObject<SearchResponse>(content);
 
             return objects.results.Select(c => new Tweet { Text = c.text, Author = c.from_user, Avatar = c.profile_image_url_https });
         }

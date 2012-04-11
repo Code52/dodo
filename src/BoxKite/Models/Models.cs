@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Dodo.Logic.Models
+namespace BoxKite.Models
 {
+    // ReSharper disable InconsistentNaming
+    
     public class Metadata
     {
         public string result_type { get; set; }
@@ -29,7 +31,7 @@ namespace Dodo.Logic.Models
         public object to_user_name { get; set; }
     }
 
-    public class RootObject
+    public class SearchResponse
     {
         public double completed_in { get; set; }
         public long max_id { get; set; }
@@ -43,4 +45,5 @@ namespace Dodo.Logic.Models
         public int since_id { get; set; }
         public string since_id_str { get; set; }
     }
+    // ReSharper restore InconsistentNaming
 }

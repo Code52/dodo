@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using BoxKite;
 using Dodo.Logic.Services;
 using Dodo.Logic.Shared;
 using Windows.Security.Authentication.Web;
