@@ -1,40 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-
-  <Identity Name="5c45f1bb-e2de-4803-bf1c-ed0b6caf142a"
-            Publisher="CN=Brendan"
-            Version="1.0.0.0" />
-
+  <Identity Name="5c45f1bb-e2de-4803-bf1c-ed0b6caf142a" Publisher="CN=Brendan" Version="1.0.0.0" />
   <Properties>
     <DisplayName>Dodo</DisplayName>
     <PublisherDisplayName>Brendan</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
     <Description>Dodo</Description>
   </Properties>
-
   <Prerequisites>
     <OSMinVersion>6.2</OSMinVersion>
     <OSMaxVersionTested>6.2</OSMaxVersionTested>
   </Prerequisites>
-
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application Id="App"
-        Executable="$targetnametoken$.exe"
-        EntryPoint="Dodo.App">
-        <VisualElements
-            DisplayName="Dodo"
-            Logo="Assets\Logo.png"
-            SmallLogo="Assets\SmallLogo.png"
-            Description="Dodo"
-            ForegroundText="light"
-            BackgroundColor="#222222">
-            <DefaultTile ShowName="allLogos" />
-            <SplashScreen Image="Assets\SplashScreen.png" />
-        </VisualElements>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Dodo.App">
+      <VisualElements DisplayName="Dodo" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Dodo" ForegroundText="light" BackgroundColor="#222222">
+        <DefaultTile ShowName="allLogos" />
+        <SplashScreen Image="Assets\SplashScreen.png" />
+      </VisualElements>
+      <Extensions>
+        <Extension Category="windows.search" />
+        <Extension Category="windows.shareTarget">
+          <ShareTarget>
+            <SupportedFileTypes>
+              <SupportsAnyFileType />
+            </SupportedFileTypes>
+          </ShareTarget>
+        </Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

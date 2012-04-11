@@ -39,7 +39,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="1" Style="{StaticResource PageHeaderTextStyle}"/>
+            
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+               <TextBlock Text="Search:" Grid.Column="1" Style="{StaticResource PageHeaderTextStyle}" />
+                <TextBox Text="{Binding SearchText}" FontSize="52" Margin="0,30" MinWidth="400" />
+            </StackPanel>
+            
+            
         </Grid>
 
         <!-- Horizontal scrolling grid used in most view states -->
