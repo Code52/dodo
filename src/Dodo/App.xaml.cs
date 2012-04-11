@@ -1,4 +1,5 @@
 ﻿using Dodo.Data;
+using Dodo.Modules.Dashboard;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -46,7 +47,7 @@ namespace Dodo
             // parameter
             var rootFrame = new Frame();
             // rootFrame.Navigate(typeof(GroupedItemsPage), sampleData.ItemGroups);
-            rootFrame.Navigate(typeof(Dashboard));
+            rootFrame.Navigate(typeof(DashboardView));
 
             // Place the frame in the current Window and ensure that it is active
             Window.Current.Content = rootFrame;

@@ -4,11 +4,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace Dodo
+namespace Dodo.Modules.Dashboard
 {
-    public sealed partial class Dashboard
+    public sealed partial class DashboardView
     {
-        public Dashboard()
+        public DashboardView()
         {
             InitializeComponent();
         }

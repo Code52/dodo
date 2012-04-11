@@ -111,10 +111,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dashboard.xaml.cs">
-      <DependentUpon>Dashboard.xaml</DependentUpon>
+    <Compile Include="Modules\Browse\BrowseView.xaml.cs">
+      <DependentUpon>BrowseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DashboardViewModel.cs" />
+    <Compile Include="Modules\Browse\BrowseViewModel.cs" />
+    <Compile Include="Modules\Dashboard\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Dashboard\DashboardViewModel.cs" />
     <Compile Include="DataModel\TasksDataSource.cs" />
     <Compile Include="GroupedItemsPage.xaml.cs">
       <DependentUpon>GroupedItemsPage.xaml</DependentUpon>
@@ -124,6 +128,18 @@
     </Compile>
     <Compile Include="ItemDetailPage.xaml.cs">
       <DependentUpon>ItemDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Searches\SearchesView.xaml.cs">
+      <DependentUpon>SearchesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Searches\SearchViewModel.cs" />
+    <Compile Include="Modules\Search\SearchViewModel.cs" />
+    <Compile Include="Modules\Search\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Share\ShareViewModel.cs" />
+    <Compile Include="Modules\Share\ShareView.xaml.cs">
+      <DependentUpon>ShareView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
@@ -171,7 +187,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dashboard.xaml">
+    <Page Include="Modules\Browse\BrowseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Dashboard\DashboardView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -186,6 +206,18 @@
     <Page Include="ItemDetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modules\Searches\SearchesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Search\SearchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Share\ShareView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{48524B
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caliburn.Micro.WinRT", "..\lib\caliburn.micro\src\Caliburn.Micro.WinRT\Caliburn.Micro.WinRT.csproj", "{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caliburn.Micro.WinRT.Extensions", "..\lib\caliburn.micro\src\Caliburn.Micro.WinRT.Extensions\Caliburn.Micro.WinRT.Extensions.csproj", "{E5718A59-1466-4B36-BA76-F596F550B19B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -62,6 +66,26 @@ Global
 		{629E961B-5EBD-4CCB-B9FA-AAC39DC8C0E3}.Release|x64.Build.0 = Release|x64
 		{629E961B-5EBD-4CCB-B9FA-AAC39DC8C0E3}.Release|x86.ActiveCfg = Release|x86
 		{629E961B-5EBD-4CCB-B9FA-AAC39DC8C0E3}.Release|x86.Build.0 = Release|x86
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Release|x64.ActiveCfg = Release|Any CPU
+		{E5718A59-1466-4B36-BA76-F596F550B19B}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDBDC52D-6A55-4531-9899-A5DCB0E09F15}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
