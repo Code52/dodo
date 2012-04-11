@@ -1,12 +1,14 @@
+using BoxKite.Models;
+
 namespace BoxKite
 {
     public class TwitterService : ITwitterService
     {
         // TODO: userstream support
 
-        public IUserSession GetUserSession(string token)
+        public IUserSession GetUserSession(TwitterCredentials credentials)
         {
-            return new UserSession(token);
+            return new UserSession(credentials);
         }
 
         public IAnonymousSession GetSession()

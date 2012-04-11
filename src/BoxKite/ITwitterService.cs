@@ -1,8 +1,10 @@
+using BoxKite.Models;
+
 namespace BoxKite
 {
     public interface ITwitterService
     {
-        IUserSession GetUserSession(string token);
+        IUserSession GetUserSession(TwitterCredentials credentials);
         IAnonymousSession GetSession();
     }
 }
