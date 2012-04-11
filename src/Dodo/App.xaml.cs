@@ -53,7 +53,9 @@ namespace Dodo
             base.OnShareTargetActivated(args);
 
             var view = new ShareView();
-            view.DataContext = new ShareViewModel();
+            var viewModel = new ShareViewModel();
+            viewModel.SetShareTarget(args);
+            view.DataContext = viewModel;
             Window.Current.Content = view;
             Window.Current.Activate();
         }
