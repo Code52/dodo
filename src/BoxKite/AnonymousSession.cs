@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using BoxKite.Models;
-using Newtonsoft.Json;
+using BoxKite.Modules;
 
 namespace BoxKite
 {
@@ -23,20 +21,7 @@ namespace BoxKite
 
             return listOfRequests.ToObservable()
                                  .SelectMany(req => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
-                                 .SelectMany(MapToTweets);
-        }
-
-        private static IEnumerable<Tweet> MapToTweets(WebResponse response)
-        {
-            var resp = (HttpWebResponse)response;
-            var stream = resp.GetResponseStream();
-
-            var reader = new StreamReader(stream);
-            var content = reader.ReadToEnd();
-
-            var objects = JsonConvert.DeserializeObject<SearchResponse>(content);
-
-            return objects.results.Select(c => new Tweet { Text = c.text, Author = c.from_user, Avatar = c.profile_image_url_https });
+                                 .SelectMany(a => a.MapToTweets());
         }
     }
 }
