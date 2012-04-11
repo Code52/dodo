@@ -14,12 +14,16 @@ namespace BoxKite
     {
         public IObservable<Tweet> SearchFor(string phrase, int resultsPerPage = 50, int pages = 1)
         {
-            // TODO: support for multiple pages
-            var request = WebRequest.Create(new Uri(string.Format("http://search.twitter.com/search.json?q={0}&rpp={1}", phrase, resultsPerPage)));
+            var listOfRequests = new List<WebRequest>();
 
-            var task = Task.Factory.FromAsync<WebResponse>(request.BeginGetResponse, request.EndGetResponse, null);
+            for (var i = 1; i <= pages; i++)
+            {
+                listOfRequests.Add(WebRequest.Create(new Uri(string.Format("http://search.twitter.com/search.json?q={0}&rpp={1}&page={2}", phrase, resultsPerPage, i))));
+            }
 
-            return Observable.FromAsync(() => task).SelectMany(MapToTweets);
+            return listOfRequests.ToObservable()
+                                 .SelectMany(req => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
+                                 .SelectMany(MapToTweets);
         }
 
         private static IEnumerable<Tweet> MapToTweets(WebResponse response)

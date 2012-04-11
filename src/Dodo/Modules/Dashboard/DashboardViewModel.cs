@@ -37,7 +37,7 @@ namespace Dodo
             _tasks.Add(new UserTask { Title = "Sign In", Command = new DelegateCommand(StartOAuthFlow) });
 
             _twitter.GetSession()
-                    .SearchFor("twitter")
+                    .SearchFor("twitter", pages:5)
                     .Subscribe(OnNext);
         }
 
