@@ -20,11 +20,13 @@ namespace Dodo.DataModel
 
         public TasksDataSource()
         {
-            var mentions = new UserTask { Title = "New Mentions", Count = 4 };
+            var timeline = new UserTask { Title = "Timeline", Count = 4 };
+            var mentions = new UserTask { Title = "Mentions", Count = 4 };
             var retweets = new UserTask { Title = "New Retweets", Count = 3 };
             var newFollowers = new UserTask { Title = "New Followers", Count = 2 };
             var lostFollowers = new UserTask { Title = "Lost Followers", Count = 1 };
 
+            Tasks.Add(timeline);
             Tasks.Add(mentions);
             Tasks.Add(retweets);
             Tasks.Add(newFollowers);
