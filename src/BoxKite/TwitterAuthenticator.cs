@@ -76,14 +76,15 @@ namespace BoxKite
             var twitterUrl = "https://api.twitter.com/oauth/request_token";
             var nonce = rand.Next(1000000000);
 
-            var sigBaseStringParams = "oauth_callback=" + UrlEncode(twitterCallbackUrl);
-            sigBaseStringParams += "&" + "oauth_consumer_key=" + twitterClientID;
-            sigBaseStringParams += "&" + "oauth_nonce=" + nonce.ToString();
-            sigBaseStringParams += "&" + "oauth_signature_method=HMAC-SHA1";
-            sigBaseStringParams += "&" + "oauth_timestamp=" + sinceEpoch;
-            sigBaseStringParams += "&" + "oauth_version=1.0";
-            var sigBaseString = "POST&";
-            sigBaseString += UrlEncode(twitterUrl) + "&" + UrlEncode(sigBaseStringParams);
+            var sigBaseStringParams =
+                string.Format(
+                    "oauth_callback={0}&oauth_consumer_key={1}&oauth_nonce={2}&oauth_signature_method=HMAC-SHA1&oauth_timestamp={3}&oauth_version=1.0",
+                    UrlEncode(twitterCallbackUrl),
+                    twitterClientID,
+                    nonce,
+                    sinceEpoch);
+
+            var sigBaseString = string.Format("POST&{0}&{1}", UrlEncode(twitterUrl), UrlEncode(sigBaseStringParams));
 
             var keyMaterial = CryptographicBuffer.ConvertStringToBinary(twitterClientSecret + "&", BinaryStringEncoding.Utf8);
             var hmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
@@ -91,17 +92,22 @@ namespace BoxKite
             var dataToBeSigned = CryptographicBuffer.ConvertStringToBinary(sigBaseString, BinaryStringEncoding.Utf8);
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signature = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
-            var dataToPost = "OAuth oauth_callback=\"" + UrlEncode(twitterCallbackUrl) + "\", oauth_consumer_key=\"" + twitterClientID + "\", oauth_nonce=\"" + nonce.ToString() + "\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"" + sinceEpoch + "\", oauth_version=\"1.0\", oauth_signature=\"" + UrlEncode(signature) + "\"";
+            var dataToPost = string.Format(
+                    "OAuth oauth_callback=\"{0}\", oauth_consumer_key=\"{1}\", oauth_nonce=\"{2}\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"{3}\", oauth_version=\"1.0\", oauth_signature=\"{4}\"",
+                    UrlEncode(twitterCallbackUrl),
+                    twitterClientID,
+                    nonce, 
+                    sinceEpoch, 
+                    UrlEncode(signature));
 
             var response = await PostData(twitterUrl, dataToPost);
 
             if (string.IsNullOrWhiteSpace(response))
                 return TwitterCredentials.Null;
-            
-            string oauthToken = null;
-            var keyValPairs = response.Split('&');
 
-            foreach (var splits in keyValPairs.Select(t => t.Split('=')))
+            string oauthToken = null;
+
+            foreach (var splits in response.Split('&').Select(t => t.Split('=')))
             {
                 switch (splits[0])
                 {
@@ -118,7 +124,7 @@ namespace BoxKite
             var startUri = new Uri(twitterUrl);
             var endUri = new Uri(twitterCallbackUrl);
 
-            var result =  await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
+            var result = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
 
             if (result.ResponseStatus != WebAuthenticationStatus.Success)
                 return TwitterCredentials.Null;
@@ -157,9 +163,6 @@ namespace BoxKite
             var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var oauthTimestamp = Convert.ToInt64(ts.TotalSeconds).ToString();
 
-            //GS - When building the signature string the params
-            //must be in alphabetical order. I can't be bothered
-            //with that, get SortedDictionary to do it's thing
             var sd = new SortedDictionary<string, string>
                          {
                              {"oauth_version", OauthVersion},
@@ -191,14 +194,15 @@ namespace BoxKite
 
             var hwr = WebRequest.Create(url);
 
-            var authorizationHeaderParams = "OAuth ";
-            authorizationHeaderParams += "oauth_nonce=\"" + Uri.EscapeDataString(oauthNonce) + "\",";
-            authorizationHeaderParams += "oauth_signature_method=\"" + Uri.EscapeDataString(OauthSignatureMethod) + "\",";
-            authorizationHeaderParams += "oauth_timestamp=\"" + Uri.EscapeDataString(oauthTimestamp) + "\",";
-            authorizationHeaderParams += "oauth_consumer_key=\"" + Uri.EscapeDataString(oauthConsumerKey) + "\",";
-            authorizationHeaderParams += "oauth_token=\"" + Uri.EscapeDataString(oauthToken) + "\",";
-            authorizationHeaderParams += "oauth_signature=\"" + Uri.EscapeDataString(signatureString) + "\",";
-            authorizationHeaderParams += "oauth_version=\"" + Uri.EscapeDataString(OauthVersion) + "\"";
+            var authorizationHeaderParams = string.Format(
+                "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", oauth_timestamp=\"{2}\", oauth_consumer_key=\"{3}\", oauth_token=\"{4}\", oauth_signature=\"{5}\", oauth_version=\"{6}\"",
+                Uri.EscapeDataString(oauthNonce),
+                Uri.EscapeDataString(OauthSignatureMethod),
+                Uri.EscapeDataString(oauthTimestamp),
+                Uri.EscapeDataString(oauthConsumerKey),
+                Uri.EscapeDataString(oauthToken),
+                Uri.EscapeDataString(signatureString),
+                Uri.EscapeDataString(OauthVersion));
 
             hwr.Headers["Authorization"] = authorizationHeaderParams;
 

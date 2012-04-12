@@ -8,7 +8,7 @@ namespace BoxKite.Modules
 {
     public static class WebResponseExtensions
     {
-        public static IEnumerable<T2> MapTo<T, T2>(this WebResponse response, Func<T, IEnumerable<T2>> callback)
+        public static IEnumerable<TOutput> MapTo<TResponse, TOutput>(this WebResponse response, Func<TResponse, IEnumerable<TOutput>> callback)
         {
             var resp = (HttpWebResponse)response;
             var stream = resp.GetResponseStream();
@@ -16,7 +16,7 @@ namespace BoxKite.Modules
             var reader = new StreamReader(stream);
             var content = reader.ReadToEnd();
 
-            var objects = JsonConvert.DeserializeObject<T>(content);
+            var objects = JsonConvert.DeserializeObject<TResponse>(content);
 
             return callback(objects);
         }

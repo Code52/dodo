@@ -12,7 +12,12 @@ namespace BoxKite.Modules
 {
     public static class TimelineExtensions
     {
-        private static Func<List<Mention>, IEnumerable<Tweet>> callback = c => c.Select(o => new Tweet { Text = o.text, Author = o.user.name, Avatar = o.user.profile_image_url_https });
+        private static Func<List<Mention>, IEnumerable<Tweet>> callback = c => c.Select(o => new Tweet
+                                                                                                 {
+                                                                                                     Text = o.text, 
+                                                                                                     Author = o.user.name, 
+                                                                                                     Avatar = o.user.profile_image_url_https
+                                                                                                 });
 
         public static IObservable<Tweet> GetMentions(this IUserSession session)
         {
