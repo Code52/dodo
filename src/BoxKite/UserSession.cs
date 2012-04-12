@@ -15,7 +15,6 @@ namespace BoxKite
         const string OauthSignatureMethod = "HMAC-SHA1";
         const string OauthVersion = "1.0";
 
-
         public UserSession(TwitterCredentials credentials)
         {
             _credentials = credentials;
@@ -97,16 +96,15 @@ namespace BoxKite
 
             var hwr = (HttpWebRequest)WebRequest.Create(fullUrl);
 
-            var authorizationHeaderParams = "OAuth ";
-            authorizationHeaderParams += "oauth_consumer_key=" + "\"" + Uri.EscapeDataString(oauthConsumerKey) + "\",";
-            authorizationHeaderParams += "oauth_nonce=" + "\"" + Uri.EscapeDataString(oauthNonce) + "\",";
-            authorizationHeaderParams += "oauth_signature=" + "\"" + Uri.EscapeDataString(signatureString) + "\",";
-            authorizationHeaderParams += "oauth_signature_method=" + "\"" + Uri.EscapeDataString(OauthSignatureMethod) + "\",";
-            authorizationHeaderParams += "oauth_timestamp=" + "\"" + Uri.EscapeDataString(oauthTimestamp) + "\",";
-            authorizationHeaderParams += "oauth_token=" + "\"" + Uri.EscapeDataString(oauthToken) + "\",";
-            authorizationHeaderParams += "oauth_version=" + "\"" + Uri.EscapeDataString(OauthVersion) + "\"";
-
-            hwr.Headers["Authorization"] = authorizationHeaderParams;
+            hwr.Headers["Authorization"] = string.Format(
+                "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", oauth_timestamp=\"{2}\", oauth_consumer_key=\"{3}\", oauth_token=\"{4}\", oauth_signature=\"{5}\", oauth_version=\"{6}\"",
+                Uri.EscapeDataString(oauthNonce),
+                Uri.EscapeDataString(OauthSignatureMethod),
+                Uri.EscapeDataString(oauthTimestamp),
+                Uri.EscapeDataString(oauthConsumerKey),
+                Uri.EscapeDataString(oauthToken),
+                Uri.EscapeDataString(signatureString),
+                Uri.EscapeDataString(OauthVersion));
 
             return hwr;
         }
