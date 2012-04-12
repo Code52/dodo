@@ -55,19 +55,14 @@ namespace Dodo.Modules.Dashboard
             const string client = "pdFvR4kdbQgugKVIQ205Cw";
             const string secret = "J9xJaIBBfH2by22bRATVC6HfVf1WGermItci7Cx0Yw";
 
-            var result = await TwitterAuthenticator.AuthenticateUser(client, "http://code52.org/twitter", secret);
+            _credentials = await TwitterAuthenticator.AuthenticateUser(client, "http://code52.org/twitter", secret);
 
-            if (result.ResponseStatus != WebAuthenticationStatus.Success)
+            if (!_credentials.Valid)
                 return;
 
-            _credentials = await TwitterAuthenticator.GetUserCredentials(client, secret, result.ResponseData);
-
-            if (_credentials == null)
-                return;
-
-            // TODO: spotting OAuth exception - remove this call after
+            // TODO: spotting OAuth exception - remove this call after it works
             var request = _twitter.GetUserSession(_credentials)
-                                  .AuthenticatedGet("statuses/mentions.json?count=200&include_rts=1&include_entities=true");
+                                  .AuthenticatedGet("statuses/mentions.json?count=200&include_entities=true");
 
             var response = await request.GetResponseAsync();
 

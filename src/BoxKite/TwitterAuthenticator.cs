@@ -8,7 +8,6 @@ using BoxKite.Models;
 using Windows.Security.Authentication.Web;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
-using Windows.UI.Core;
 
 namespace BoxKite
 {
@@ -59,7 +58,7 @@ namespace BoxKite
             }
         }
 
-        public static async Task<WebAuthenticationResult> AuthenticateUser(string twitterClientID, string twitterCallbackUrl, string twitterClientSecret)
+        public static async Task<TwitterCredentials> AuthenticateUser(string twitterClientID, string twitterCallbackUrl, string twitterClientSecret)
         {
             if (string.IsNullOrWhiteSpace(twitterClientID))
                 throw new ArgumentException("TwitterClientID must be specified", twitterClientID);
@@ -97,10 +96,8 @@ namespace BoxKite
             var response = await PostData(twitterUrl, dataToPost);
 
             if (string.IsNullOrWhiteSpace(response))
-            {
-                return null;
-            }
-
+                return TwitterCredentials.Null;
+            
             string oauthToken = null;
             var keyValPairs = response.Split('&');
 
@@ -115,16 +112,21 @@ namespace BoxKite
             }
 
             if (string.IsNullOrWhiteSpace(oauthToken))
-                return null;
+                return TwitterCredentials.Null;
 
             twitterUrl = "https://api.twitter.com/oauth/authorize?oauth_token=" + oauthToken;
             var startUri = new Uri(twitterUrl);
             var endUri = new Uri(twitterCallbackUrl);
 
-            return await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
+            var result =  await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
+
+            if (result.ResponseStatus != WebAuthenticationStatus.Success)
+                return TwitterCredentials.Null;
+
+            return await GetUserCredentials(twitterClientID, twitterClientSecret, result.ResponseData);
         }
 
-        public static async Task<TwitterCredentials> GetUserCredentials(string consumerKey, string consumerSecret, string responseText)
+        private static async Task<TwitterCredentials> GetUserCredentials(string consumerKey, string consumerSecret, string responseText)
         {
             var args = responseText.Substring(responseText.IndexOf("?") + 1)
                                    .Split(new[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
@@ -168,7 +170,7 @@ namespace BoxKite
                              {"oauth_token", oauthToken}
                          };
 
-            var baseString = Uri.EscapeDataString(url) + "&";
+            var baseString = "GET&" + Uri.EscapeDataString(url) + "&";
             foreach (var entry in sd)
             {
                 baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
@@ -223,6 +225,8 @@ namespace BoxKite
                 if (key.Equals("oauth_token_secret", StringComparison.OrdinalIgnoreCase))
                     credentials.TokenSecret = value;
             }
+
+            credentials.Valid = true;
 
             return credentials;
         }

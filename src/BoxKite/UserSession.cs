@@ -38,7 +38,7 @@ namespace BoxKite
 
         public WebRequest AuthenticatedGet(string relativeUrl)
         {
-            var url = "http://api.twitter.com/1/" + relativeUrl;
+            var url = "https://api.twitter.com/1/" + relativeUrl;
 
             var oauthToken = _credentials.Token;
             var oauthConsumerKey = _credentials.ConsumerKey;
@@ -61,7 +61,7 @@ namespace BoxKite
                              {"oauth_token", oauthToken}
                          };
 
-            var baseString = Uri.EscapeDataString(url) + "&";
+            var baseString = "GET&" + Uri.EscapeDataString(url) + "&";
             foreach (var entry in sd)
             {
                 baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
@@ -72,7 +72,7 @@ namespace BoxKite
             //last 3 chars - %26
             baseString = baseString.Substring(0, baseString.Length - 3);
 
-            var signingKey = Uri.EscapeDataString(_credentials.ConsumerSecret) + "&" + Uri.EscapeDataString(_credentials.TokenSecret) + "&";
+            var signingKey = Uri.EscapeDataString(_credentials.ConsumerSecret) + "&" + Uri.EscapeDataString(_credentials.TokenSecret);
 
             var keyMaterial = CryptographicBuffer.ConvertStringToBinary(signingKey, BinaryStringEncoding.Utf8);
             var hmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
