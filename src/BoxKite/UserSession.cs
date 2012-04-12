@@ -36,7 +36,7 @@ namespace BoxKite
             throw new NotImplementedException();
         }
 
-        public WebRequest AuthenticatedGet(string relativeUrl)
+        public WebRequest AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters)
         {
             var url = "https://api.twitter.com/1/" + relativeUrl;
 
@@ -53,15 +53,23 @@ namespace BoxKite
             //with that, get SortedDictionary to do it's thing
             var sd = new SortedDictionary<string, string>
                          {
-                             {"oauth_version", OauthVersion},
                              {"oauth_consumer_key", oauthConsumerKey},
                              {"oauth_nonce", oauthNonce},
                              {"oauth_signature_method", OauthSignatureMethod},
                              {"oauth_timestamp", oauthTimestamp},
-                             {"oauth_token", oauthToken}
+                             {"oauth_token", oauthToken},
+                             {"oauth_version", OauthVersion}
                          };
 
+            var querystring = "";
+
             var baseString = "GET&" + Uri.EscapeDataString(url) + "&";
+            foreach (var entry in parameters)
+            {
+                querystring += entry.Key + "=" + entry.Value + "&";
+                baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
+            }
+
             foreach (var entry in sd)
             {
                 baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
@@ -81,15 +89,21 @@ namespace BoxKite
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
 
-            var hwr = (HttpWebRequest)WebRequest.Create(url);
+            var fullUrl = url;
+            if (!string.IsNullOrWhiteSpace(querystring))
+            {
+                fullUrl += "?" + querystring.Substring(0, querystring.Length - 1);
+            }
+
+            var hwr = (HttpWebRequest)WebRequest.Create(fullUrl);
 
             var authorizationHeaderParams = "OAuth ";
+            authorizationHeaderParams += "oauth_consumer_key=" + "\"" + Uri.EscapeDataString(oauthConsumerKey) + "\",";
             authorizationHeaderParams += "oauth_nonce=" + "\"" + Uri.EscapeDataString(oauthNonce) + "\",";
+            authorizationHeaderParams += "oauth_signature=" + "\"" + Uri.EscapeDataString(signatureString) + "\",";
             authorizationHeaderParams += "oauth_signature_method=" + "\"" + Uri.EscapeDataString(OauthSignatureMethod) + "\",";
             authorizationHeaderParams += "oauth_timestamp=" + "\"" + Uri.EscapeDataString(oauthTimestamp) + "\",";
-            authorizationHeaderParams += "oauth_consumer_key=" + "\"" + Uri.EscapeDataString(oauthConsumerKey) + "\",";
             authorizationHeaderParams += "oauth_token=" + "\"" + Uri.EscapeDataString(oauthToken) + "\",";
-            authorizationHeaderParams += "oauth_signature=" + "\"" + Uri.EscapeDataString(signatureString) + "\",";
             authorizationHeaderParams += "oauth_version=" + "\"" + Uri.EscapeDataString(OauthVersion) + "\"";
 
             hwr.Headers["Authorization"] = authorizationHeaderParams;

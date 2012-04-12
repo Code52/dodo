@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using BoxKite.Models;
@@ -12,7 +12,7 @@ namespace BoxKite
         Task<Tweet> UpdateStatus(string text); 
         Task<Tweet> Retweet(long id);
         Task<Tweet> Reply(long id, string text);
-        
-        WebRequest AuthenticatedGet(string relativeUrl);
+
+        WebRequest AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters);
     }
 }

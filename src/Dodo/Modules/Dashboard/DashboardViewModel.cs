@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using BoxKite;
 using BoxKite.Models;
 using BoxKite.Modules;
 using Dodo.Logic.Shared;
-using Windows.Security.Authentication.Web;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
 using Windows.UI.Core;
 using BindableBase = Dodo.Logic.Shared.BindableBase;
 
@@ -16,10 +11,8 @@ namespace Dodo.Modules.Dashboard
 {
     public class DashboardViewModel : BindableBase
     {
-        const string OauthSignatureMethod = "HMAC-SHA1";
-        const string OauthVersion = "1.0";
-
         private readonly ITwitterService _twitter;
+        private IUserSession _session;
         private readonly CoreDispatcher _dispatcher;
 
         public DashboardViewModel(ITwitterService twitter, CoreDispatcher dispatcher)
@@ -60,16 +53,11 @@ namespace Dodo.Modules.Dashboard
             if (!_credentials.Valid)
                 return;
 
-            // TODO: spotting OAuth exception - remove this call after it works
-            var request = _twitter.GetUserSession(_credentials)
-                                  .AuthenticatedGet("statuses/mentions.json?count=200&include_entities=true");
+            // TODO: save credentials to store
 
-            var response = await request.GetResponseAsync();
+            _session = _twitter.GetUserSession(_credentials);
 
-            if (_credentials != null)
-            {
-                _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
-            }
+            _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
         }
 
         private TwitterCredentials _credentials;
@@ -88,9 +76,8 @@ namespace Dodo.Modules.Dashboard
         private void GetMentions()
         {
             Tweets.Clear();
-            _twitter.GetUserSession(_credentials)
-                                  .GetMentions()
-                                  .Subscribe(OnNext);
+            _session.GetMentions()
+                    .Subscribe(OnNext);
         }
 
         private void OnNext(Tweet tweet)
