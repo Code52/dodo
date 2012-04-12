@@ -20,6 +20,20 @@
             Source="{Binding Tweets}"
             IsSourceGrouped="False"
 			d:Source="{Binding Tweets, Source={d:DesignInstance Type=data:TasksDataSource, IsDesignTimeCreatable=True}}" />
+
+        <Storyboard x:Name="RotatingSquare" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="rectangle">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="45"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="90"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="135"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2" Value="180"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2.5" Value="225"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3" Value="270"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3.5" Value="315"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:4" Value="360"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
     </UserControl.Resources>
 
     <!--
@@ -54,7 +68,7 @@
 
             <Grid x:Name="gridLayoutPanel" Margin="120,0,0,0" >
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="300" />
+					<ColumnDefinition Width="350" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
@@ -65,11 +79,30 @@
                           ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
                           ItemTemplate="{StaticResource MenuItemTemplate}" SelectionMode="None" />
 
-                <GridView Grid.Column="1"
-                          AutomationProperties.AutomationId="TweetGridView"
+						  <Grid Grid.Column="1">
+
+						  
+                <GridView AutomationProperties.AutomationId="TweetGridView"
                           AutomationProperties.Name="Search Tweets"
                           ItemsSource="{Binding Source={StaticResource tweetViewSource}}"
-                          ItemTemplate="{StaticResource TweetItemTemplate}" SelectionMode="None" />
+                          ItemTemplate="{StaticResource TweetItemTemplate}" 
+                          SelectionMode="None" />
+
+						    <Rectangle x:Name="rectangle" 
+									   Fill="{StaticResource SomethingElse}" 
+									   HorizontalAlignment="Left" 
+									   Height="95" 
+                                       VerticalAlignment="Center" 
+                                       Width="95" 
+                                       RenderTransformOrigin="0.5,0.5" 
+                                       Canvas.ZIndex="10" 
+                                       Margin="400,0,0,0">
+        						<Rectangle.RenderTransform>
+        							<CompositeTransform/>
+        						</Rectangle.RenderTransform>
+							</Rectangle>
+						  </Grid>
+
             </Grid>
         </ScrollViewer>
 
@@ -94,7 +127,7 @@
 					ItemTemplate="{StaticResource Standard80ItemTemplate}"/>
             </StackPanel>-->
         </ScrollViewer>
-
+      
         <VisualStateManager.VisualStateGroups>
 
             <!-- Visual states reflect the application's view state -->

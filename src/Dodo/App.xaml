@@ -32,7 +32,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource SomethingElse}" Width="60" Height="60">
-                        <TextBlock Text="{Binding Count}" FontFamily="Segoe UI Light" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Count}" Visibility="Collapsed" FontFamily="Segoe UI Light" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap" FontSize="24" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Column="1" Margin="10,0" FontFamily="Segoe UI Light" FontWeight="Normal"/>
                 </Grid>
