@@ -44,5 +44,17 @@ namespace BoxKite.Modules
             return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
                              .SelectMany(a => a.MapTo(callback));
         }
+
+        public static IObservable<Tweet> GetRetweets(this IUserSession session)
+        {
+            var parameters = new SortedDictionary<string, string>
+                                 {
+                                     {"count", "100"},
+                                     {"include_entities", "true"},
+                                 };
+            var req = session.AuthenticatedGet("statuses/retweeted_to_me.json", parameters);
+            return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
+                             .SelectMany(a => a.MapTo(callback));
+        }
     }
 }

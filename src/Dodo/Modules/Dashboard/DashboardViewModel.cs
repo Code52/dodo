@@ -67,10 +67,27 @@ namespace Dodo.Modules.Dashboard
             Tweets.Clear();
 
             Tasks.Clear();
+            Tasks.Add(new UserTask { Title = "Timeline", Command = new DelegateCommand(GetTimeline) });
             Tasks.Add(new UserTask { Title = "Mentions", Command = new DelegateCommand(GetMentions) });
-            Tasks.Add(new UserTask { Title = "Retweets" });
+            Tasks.Add(new UserTask { Title = "Retweets", Command = new DelegateCommand(GetRetweets) });
             Tasks.Add(new UserTask { Title = "New Followers" });
             Tasks.Add(new UserTask { Title = "Lost Followers" });
+
+            GetTimeline();
+        }
+
+        private void GetTimeline()
+        {
+            Tweets.Clear();
+            _session.GetHomeTimeline()
+                    .Subscribe(OnNext);
+        }
+
+        private void GetRetweets()
+        {
+            Tweets.Clear();
+            _session.GetRetweets()
+                    .Subscribe(OnNext);
         }
 
         private void GetMentions()

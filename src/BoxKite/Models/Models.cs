@@ -86,6 +86,7 @@ namespace BoxKite.Models
         public bool default_profile { get; set; }
         public bool default_profile_image { get; set; }
         public bool? following { get; set; }
+        [JsonIgnore]
         public bool follow_request_sent { get; set; }
         public object notifications { get; set; }
     }
