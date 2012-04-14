@@ -111,9 +111,11 @@
     <Compile Include="ITwitterService.cs" />
     <Compile Include="IUserSession.cs" />
     <Compile Include="Models\BindableBase.cs" />
+    <Compile Include="Models\DirectMessage.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\Tweet.cs" />
     <Compile Include="Models\TwitterCredentials.cs" />
+    <Compile Include="Modules\Timelines\DirectMessageExtensions.cs" />
     <Compile Include="Modules\Timelines\TimelineExtensions.cs" />
     <Compile Include="Modules\Timelines\WebResponseExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
