@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using Autofac.Core;
 using BoxKite;
-using BoxKite.Models;
 using Dodo.Logic;
 using Dodo.Modules.Dashboard;
 using Dodo.Modules.Search;

@@ -59,18 +59,5 @@ namespace Dodo.Modules.Dashboard
         {
             _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, (s, e) => action(), this, null);
         }
-
-        private void CommandClicked(object sender, ItemClickEventArgs e)
-        {
-            // TODO: get a proper framework to handle this behaviour
-            var task = e.ClickedItem as UserTask;
-
-            var command = task.Command;
-            if (command == null)
-                return;
-
-            if (task.Command.CanExecute(null))
-                task.Command.Execute(null);
-        }
     }
 }

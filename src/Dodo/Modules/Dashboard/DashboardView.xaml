@@ -72,16 +72,19 @@
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
-                <GridView AutomationProperties.AutomationId="ItemGridView"
+                <ItemsControl AutomationProperties.AutomationId="ItemGridView"
                           AutomationProperties.Name="Items In Group"
-                          ItemClick="CommandClicked"
-                          IsItemClickEnabled="True"
                           HorizontalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
                           ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
-                          ItemTemplate="{StaticResource MenuItemTemplate}" 
-                          SelectionMode="None" />
-
+                          ItemTemplate="{StaticResource MenuItemTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                   
 				<Grid Grid.Column="1">
                     <GridView AutomationProperties.AutomationId="TweetGridView"
                               AutomationProperties.Name="Search Tweets"
