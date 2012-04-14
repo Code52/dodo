@@ -59,7 +59,7 @@
 
 			 <DataTemplate x:Key="TweetItemTemplate">
                 <Grid Background="{StaticResource BackgroundSemitransparent}">
-                    <Grid Width="480" Margin="10">
+                    <Grid Width="480" Margin="10" Height="100">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -86,6 +86,7 @@
                                        FontFamily="Segoe UI Light"
                                        FontWeight="Normal"
                                        Text="{Binding Text}"/>
+                            <TextBlock Text="{Binding FriendlyTime}" />
                         </StackPanel>
                     </Grid>
                 </Grid>

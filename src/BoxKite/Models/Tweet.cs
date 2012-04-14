@@ -1,4 +1,7 @@
-﻿namespace BoxKite.Models
+﻿using System;
+using BoxKite.Extensions;
+
+namespace BoxKite.Models
 {
     public class Tweet : BindableBase
     {
@@ -21,6 +24,18 @@
         {
             get { return _author; }
             set { SetProperty(ref _author, value); }
+        }
+
+        private DateTime _date;
+        public DateTime Time
+        {
+            get { return _date; }
+            set { SetProperty(ref _date, value); }
+        }
+
+        public string FriendlyTime
+        {
+            get { return Time.ToFriendlyText(); }
         }
     }
 }
