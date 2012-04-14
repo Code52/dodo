@@ -121,6 +121,7 @@
     <Compile Include="Models\TwitterCredentials.cs" />
     <Compile Include="Modules\Timelines\DirectMessageExtensions.cs" />
     <Compile Include="Modules\Timelines\TimelineExtensions.cs" />
+    <Compile Include="Modules\Timelines\TweetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterService.cs" />
     <Compile Include="AnonymousSession.cs" />

@@ -37,5 +37,12 @@ namespace BoxKite.Models
         {
             get { return Time.ToFriendlyText(); }
         }
+
+        private string _id;
+        public string Id
+        {
+            get { return _id; }
+            set { SetProperty(ref _id , value); }
+        }
     }
 }

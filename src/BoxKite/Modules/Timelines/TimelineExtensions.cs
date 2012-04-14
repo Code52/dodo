@@ -14,6 +14,7 @@ namespace BoxKite.Modules
     {
         static readonly Func<List<Mention>, IEnumerable<Tweet>> Callback = c => c.Select(o => new Tweet
                                                                                                  {
+                                                                                                     Id = o.id_str,
                                                                                                      Text = o.text,
                                                                                                      Author = o.user.name,
                                                                                                      Avatar = o.user.profile_image_url_https,
@@ -54,16 +55,6 @@ namespace BoxKite.Modules
             var req = session.AuthenticatedGet("statuses/retweeted_to_me.json", parameters);
             return req.ToObservable()
                       .SelectMany(a => a.MapTo(Callback));
-        }
-
-        public static IObservable<Tweet> Tweet(this IUserSession session, string text)
-        {
-            var parameters = new SortedDictionary<string, string>
-                                 {
-                                     {"status", text},
-                                 };
-            var req = session.AuthenticatedPost("statuses/update.json", parameters);
-            return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
     }
 }

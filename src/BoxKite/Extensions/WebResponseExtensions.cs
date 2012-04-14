@@ -29,5 +29,12 @@ namespace BoxKite.Extensions
             var objects = JsonConvert.DeserializeObject<TResponse>(content);
             return callback(objects);
         }
+
+        public static TOutput MapTo<TResponse, TOutput>(this HttpResponseMessage response, Func<TResponse, TOutput> callback)
+        {
+            var content = response.Content.ReadAsStringAsync().Result;
+            var objects = JsonConvert.DeserializeObject<TResponse>(content);
+            return callback(objects);
+        }
     }
 }
