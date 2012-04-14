@@ -70,6 +70,7 @@ namespace Dodo.Modules.Dashboard
             Tasks.Add(new UserTask { Title = "Timeline", Command = new DelegateCommand(GetTimeline) });
             Tasks.Add(new UserTask { Title = "Mentions", Command = new DelegateCommand(GetMentions) });
             Tasks.Add(new UserTask { Title = "Retweets", Command = new DelegateCommand(GetRetweets) });
+            Tasks.Add(new UserTask { Title = "DMs", Command = new DelegateCommand(GetDirectMessages) });
             Tasks.Add(new UserTask { Title = "New Followers" });
             Tasks.Add(new UserTask { Title = "Lost Followers" });
 
@@ -95,6 +96,17 @@ namespace Dodo.Modules.Dashboard
             Tweets.Clear();
             _session.GetMentions()
                     .Subscribe(OnNext);
+        }
+
+        private void GetDirectMessages()
+        {
+            Tweets.Clear();
+
+            _session.GetDirectMessages()
+                .Subscribe(OnNext);
+
+            _session.GetSentDirectMessages()
+                .Subscribe(OnNext);
         }
 
         private void OnNext(Tweet tweet)
