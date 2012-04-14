@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using BoxKite.Extensions;
 using BoxKite.Models;
 
 // ReSharper disable CheckNamespace
@@ -16,8 +17,9 @@ namespace BoxKite.Modules
                                                                                                  {
                                                                                                      Text = o.text, 
                                                                                                      Author = o.user.name, 
-                                                                                                     Avatar = o.user.profile_image_url_https
-                                                                                                 });
+                                                                                                     Avatar = o.user.profile_image_url_https,
+                                                                                                     Time = o.created_at.ParseDateTime()
+                                                                                                 }).OrderByDescending(o => o.Time);
 
         public static IObservable<Tweet> GetMentions(this IUserSession session)
         {

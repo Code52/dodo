@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using BoxKite.Extensions;
 using BoxKite.Models;
 
 // ReSharper disable CheckNamespace
@@ -17,8 +18,9 @@ namespace BoxKite.Modules
             Text = o.text,
             Author = o.sender.name,
             Avatar = o.sender.profile_image_url_https,
-            Recipient = o.recipient.name
-        });
+            Recipient = o.recipient.name,
+            Time = o.created_at.ParseDateTime()
+        }).OrderByDescending(o => o.Time);
 
         public static IObservable<DirectMessage> GetDirectMessages(this IUserSession session)
         {
