@@ -21,5 +21,18 @@ namespace BoxKite.Modules
             return callback(objects);
         }
 
+        public static TOutput MapTo<TResponse, TOutput>(this WebResponse response, Func<TResponse, TOutput> callback)
+        {
+            var resp = (HttpWebResponse)response;
+            var stream = resp.GetResponseStream();
+
+            var reader = new StreamReader(stream);
+            var content = reader.ReadToEnd();
+
+            var objects = JsonConvert.DeserializeObject<TResponse>(content);
+
+            return callback(objects);
+        }
+
     }
 }
