@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using BoxKite;
 using Dodo.Logic.Shared;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -28,8 +27,7 @@ namespace Dodo.Modules.Dashboard
             _storyboard = Resources["RotatingSquare"] as Storyboard;
             _storyboard.Begin();
 
-            // TODO: wireup IoC bits and do this properly
-            _viewModel = new DashboardViewModel(new TwitterService(), _dispatcher);
+            _viewModel = e.Parameter as DashboardViewModel;
             _viewModel.Tweets.CollectionChanged += Tweets_CollectionChanged;
             _viewModel.Start();
 
