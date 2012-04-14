@@ -3,7 +3,7 @@ using BoxKite.Extensions;
 
 namespace BoxKite.Models
 {
-    public class Tweet : BindableBase
+    public class Tweet : PropertyChangedBase
     {
         private string _text;
         public string Text

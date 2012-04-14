@@ -6,7 +6,6 @@ using BoxKite.Models;
 using BoxKite.Modules;
 using Dodo.Logic.Shared;
 using Windows.UI.Core;
-using BindableBase = Dodo.Logic.Shared.BindableBase;
 
 namespace Dodo.Modules.Dashboard
 {

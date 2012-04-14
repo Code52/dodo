@@ -26,13 +26,7 @@ namespace Dodo
                 // TODO: Load state from previously suspended application
             }
 
-            var builder = new ContainerBuilder();
-            builder.RegisterType<DashboardViewModel>();
-            builder.RegisterType<TwitterService>().AsImplementedInterfaces();
-            builder.RegisterInstance(Window.Current.Dispatcher).As<CoreDispatcher>();
-
-            var container = builder.Build();
-
+            var container = GetContainer();
             var rootViewModel = container.Resolve<DashboardViewModel>();
 
             var rootFrame = new Frame();
@@ -55,7 +49,6 @@ namespace Dodo
             viewModel.SearchText = args.QueryText;
             view.DataContext = viewModel;
 
-
             Window.Current.Content = view;
             Window.Current.Activate();
         }
@@ -70,6 +63,17 @@ namespace Dodo
             view.DataContext = viewModel;
             Window.Current.Content = view;
             Window.Current.Activate();
+        }
+
+        static IContainer GetContainer()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<DashboardViewModel>();
+            builder.RegisterType<TwitterService>().AsImplementedInterfaces();
+            builder.RegisterInstance(Window.Current.Dispatcher).As<CoreDispatcher>();
+
+            var container = builder.Build();
+            return container;
         }
     }
 }

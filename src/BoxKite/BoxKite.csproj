@@ -114,7 +114,7 @@
     <Compile Include="IAnonymousSession.cs" />
     <Compile Include="ITwitterService.cs" />
     <Compile Include="IUserSession.cs" />
-    <Compile Include="Models\BindableBase.cs" />
+    <Compile Include="Models\PropertyChangedBase.cs" />
     <Compile Include="Models\DirectMessage.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\Tweet.cs" />

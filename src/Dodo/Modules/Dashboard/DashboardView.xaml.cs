@@ -14,7 +14,7 @@ namespace Dodo.Modules.Dashboard
         DashboardViewModel _viewModel;
         Storyboard _storyboard;
         bool _isLoading = true;
-        private CoreDispatcher _dispatcher;
+        CoreDispatcher _dispatcher;
 
         public DashboardView()
         {
