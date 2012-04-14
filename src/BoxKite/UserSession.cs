@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using BoxKite.Models;
 using Windows.Security.Cryptography;
@@ -38,6 +41,54 @@ namespace BoxKite
         public WebRequest AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters)
         {
             var url = "https://api.twitter.com/1/" + relativeUrl;
+            var querystring = parameters.Aggregate("", (current, entry) => current + (entry.Key + "=" + entry.Value + "&"));
+            var oauth = BuildAuthenticatedResult(relativeUrl, parameters, "GET");
+            var fullUrl = url;
+
+            if (!string.IsNullOrWhiteSpace(querystring))
+            {
+                fullUrl += "?" + querystring.Substring(0, querystring.Length - 1);
+            }
+
+            var hwr = (HttpWebRequest)WebRequest.Create(fullUrl);
+
+            hwr.Headers["Authorization"] = string.Format(
+                "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", oauth_timestamp=\"{2}\", oauth_consumer_key=\"{3}\", oauth_token=\"{4}\", oauth_signature=\"{5}\", oauth_version=\"{6}\"",
+                Uri.EscapeDataString(oauth.Nonce),
+                Uri.EscapeDataString(oauth.SignatureMethod),
+                Uri.EscapeDataString(oauth.Timestamp),
+                Uri.EscapeDataString(oauth.ConsumerKey),
+                Uri.EscapeDataString(oauth.Token),
+                Uri.EscapeDataString(oauth.SignatureString),
+                Uri.EscapeDataString(oauth.Version));
+
+            return hwr;
+        }
+
+        public Task<HttpResponseMessage> AuthenticatedPost(string relativeUrl, SortedDictionary<string, string> parameters)
+        {
+
+            var url = "https://api.twitter.com/1/" + relativeUrl;
+            var oauth = BuildAuthenticatedResult(relativeUrl, parameters, "POST");
+            var client = new HttpClient();
+            
+            var responseMessage = new HttpResponseMessage();
+
+            client.DefaultRequestHeaders.Add("Authorization", oauth.Header);
+
+            string content = parameters.Aggregate(string.Empty, (current, e) => current + string.Format("{0}={1}&", e.Key, e.Value));
+            content.Substring(0, content.Length - 1);
+
+            var data = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
+            //responseMessage = client.PostAsync(url, data).Result;
+
+            return client.PostAsync(url, data);
+
+        }
+
+        private OAuth BuildAuthenticatedResult(string relativeUrl, IEnumerable<KeyValuePair<string, string>> parameters, string method)
+        {
+            var url = "https://api.twitter.com/1/" + relativeUrl;
 
             var oauthToken = _credentials.Token;
             var oauthConsumerKey = _credentials.ConsumerKey;
@@ -62,11 +113,21 @@ namespace BoxKite
 
             var querystring = "";
 
-            var baseString = "GET&" + Uri.EscapeDataString(url) + "&";
-            foreach (var entry in parameters)
+            var baseString = method.ToUpper() + "&" + Uri.EscapeDataString(url) + "&";
+
+            if (method.ToUpper() == "GET")
             {
-                querystring += entry.Key + "=" + entry.Value + "&";
-                baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
+                foreach (var entry in parameters)
+                {
+                    querystring += entry.Key + "=" + entry.Value + "&";
+                    baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
+                }
+            }
+
+            if (method.ToUpper() == "POST")
+            {
+                foreach (var entry in parameters)
+                    sd.Add(entry.Key, entry.Value);
             }
 
             foreach (var entry in sd)
@@ -74,6 +135,7 @@ namespace BoxKite
                 baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
             }
 
+           
             //GS - Remove the trailing ambersand char, remember 
             //it's been urlEncoded so you have to remove the 
             //last 3 chars - %26
@@ -94,19 +156,39 @@ namespace BoxKite
                 fullUrl += "?" + querystring.Substring(0, querystring.Length - 1);
             }
 
-            var hwr = (HttpWebRequest)WebRequest.Create(fullUrl);
+            return new OAuth
+                       {
+                           Nonce = oauthNonce,
+                           SignatureMethod = OauthSignatureMethod,
+                           Timestamp = oauthTimestamp,
+                           ConsumerKey = oauthConsumerKey,
+                           Token = oauthToken,
+                           SignatureString = signatureString,
+                           Version = OauthVersion,
+                           Header = string.Format(
+                                        "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", oauth_timestamp=\"{2}\", oauth_consumer_key=\"{3}\", oauth_token=\"{4}\", oauth_signature=\"{5}\", oauth_version=\"{6}\"",
+                                        Uri.EscapeDataString(oauthNonce),
+                                        Uri.EscapeDataString(OauthSignatureMethod),
+                                        Uri.EscapeDataString(oauthTimestamp),
+                                        Uri.EscapeDataString(oauthConsumerKey),
+                                        Uri.EscapeDataString(oauthToken),
+                                        Uri.EscapeDataString(signatureString),
+                                        Uri.EscapeDataString(OauthVersion))
 
-            hwr.Headers["Authorization"] = string.Format(
-                "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", oauth_timestamp=\"{2}\", oauth_consumer_key=\"{3}\", oauth_token=\"{4}\", oauth_signature=\"{5}\", oauth_version=\"{6}\"",
-                Uri.EscapeDataString(oauthNonce),
-                Uri.EscapeDataString(OauthSignatureMethod),
-                Uri.EscapeDataString(oauthTimestamp),
-                Uri.EscapeDataString(oauthConsumerKey),
-                Uri.EscapeDataString(oauthToken),
-                Uri.EscapeDataString(signatureString),
-                Uri.EscapeDataString(OauthVersion));
+                       };
 
-            return hwr;
+        }
+
+        private struct OAuth
+        {
+            public string Nonce;
+            public string SignatureMethod;
+            public string Timestamp;
+            public string ConsumerKey;
+            public string Token;
+            public string SignatureString;
+            public string Version;
+            public string Header;
         }
     }
 }

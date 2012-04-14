@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BoxKite.Models;
 
@@ -14,5 +15,6 @@ namespace BoxKite
         Task<Tweet> Reply(long id, string text);
 
         WebRequest AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters);
+        Task<HttpResponseMessage> AuthenticatedPost(string relativeUrl, SortedDictionary<string, string> parameters);
     }
 }
