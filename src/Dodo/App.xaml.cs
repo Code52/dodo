@@ -1,5 +1,8 @@
 ﻿using Autofac;
+using Autofac.Core;
 using BoxKite;
+using BoxKite.Models;
+using Dodo.Logic;
 using Dodo.Modules.Dashboard;
 using Dodo.Modules.Search;
 using Dodo.Modules.Share;
@@ -69,11 +72,12 @@ namespace Dodo
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<DashboardViewModel>();
-            builder.RegisterType<TwitterService>().AsImplementedInterfaces();
+            builder.RegisterType<AnonymousSession>().AsImplementedInterfaces();
+            builder.RegisterType<UserSession>().AsImplementedInterfaces();
+            builder.RegisterType<DiagnosticService>().AsImplementedInterfaces();
             builder.RegisterInstance(Window.Current.Dispatcher).As<CoreDispatcher>();
 
-            var container = builder.Build();
-            return container;
+            return builder.Build();
         }
     }
 }

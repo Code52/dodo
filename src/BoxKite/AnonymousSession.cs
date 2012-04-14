@@ -16,7 +16,7 @@ namespace BoxKite
                                                                                                         Id = c.id_str,
                                                                                                         Text = c.text,
                                                                                                         Author = c.from_user,
-                                                                                                        Avatar = c.profile_image_url_https
+                                                                                                        Avatar = c.profile_image_url_https,
                                                                                                     });
 
         public IObservable<Tweet> SearchFor(string phrase, int resultsPerPage = 50, int pages = 1)

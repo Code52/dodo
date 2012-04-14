@@ -1,7 +1,9 @@
+using System;
 using BoxKite.Models;
 
 namespace BoxKite
 {
+    [Obsolete("Useless class")]
     public class TwitterService : ITwitterService
     {
         // TODO: userstream support

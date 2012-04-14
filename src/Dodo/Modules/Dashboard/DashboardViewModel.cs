@@ -4,6 +4,7 @@ using BoxKite;
 using BoxKite.Authentication;
 using BoxKite.Models;
 using BoxKite.Modules;
+using Dodo.Logic;
 using Dodo.Logic.Shared;
 using Windows.UI.Core;
 
@@ -11,13 +12,20 @@ namespace Dodo.Modules.Dashboard
 {
     public class DashboardViewModel : BindableBase
     {
-        private readonly ITwitterService _twitter;
-        private IUserSession _session;
-        private readonly CoreDispatcher _dispatcher;
+        readonly Func<IAnonymousSession> _getAnonymousSession;
+        readonly Func<IUserSession> _getUserSession;
+        readonly IDiagnosticService _diagnostics;
+        readonly CoreDispatcher _dispatcher;
 
-        public DashboardViewModel(ITwitterService twitter, CoreDispatcher dispatcher)
+        public DashboardViewModel(
+            Func<IAnonymousSession> getAnonymousSession,
+            Func<IUserSession> getUserSession,
+            IDiagnosticService diagnostics,
+            CoreDispatcher dispatcher)
         {
-            _twitter = twitter;
+            _getAnonymousSession = getAnonymousSession;
+            _getUserSession = getUserSession;
+            _diagnostics = diagnostics;
             _dispatcher = dispatcher;
         }
 
@@ -37,7 +45,7 @@ namespace Dodo.Modules.Dashboard
         {
             _tasks.Add(new UserTask { Title = "Sign In", Command = new DelegateCommand(StartOAuthFlow) });
 
-            _twitter.GetSession()
+            _getAnonymousSession()
                     .SearchFor("twitter", pages: 5)
                     .Subscribe(OnNext);
         }
@@ -55,7 +63,9 @@ namespace Dodo.Modules.Dashboard
 
             // TODO: save credentials to store
 
-            _session = _twitter.GetUserSession(_credentials);
+            
+
+            // _session = _twitter.GetUserSession(_credentials);
 
             _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
         }
@@ -80,38 +90,43 @@ namespace Dodo.Modules.Dashboard
         private void GetTimeline()
         {
             Tweets.Clear();
-            _session.GetHomeTimeline()
-                    .Subscribe(OnNext, OnError);
+            _getUserSession()
+                .GetHomeTimeline()
+                .Subscribe(OnNext, OnError);
         }
 
         private void GetRetweets()
         {
             Tweets.Clear();
-            _session.GetRetweets()
-                    .Subscribe(OnNext, OnError);
+            _getUserSession()
+                .GetRetweets()
+                .Subscribe(OnNext, OnError);
         }
 
         private void GetMentions()
         {
             Tweets.Clear();
-            _session.GetMentions()
-                    .Subscribe(OnNext, OnError);
+            _getUserSession()
+                .GetMentions()
+                .Subscribe(OnNext, OnError);
         }
 
         private void GetDirectMessages()
         {
             Tweets.Clear();
 
-            _session.GetDirectMessages()
+            _getUserSession()
+                .GetDirectMessages()
                 .Subscribe(OnNext, OnError);
 
-            _session.GetSentDirectMessages()
+            _getUserSession()
+                .GetSentDirectMessages()
                 .Subscribe(OnNext, OnError);
         }
 
         private void OnError(Exception ex)
         {
-            
+            _diagnostics.LogError("Dashboard", ex);
         }
         
         private void OnNext(Tweet tweet)

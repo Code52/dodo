@@ -114,6 +114,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDiagnosticService.cs" />
     <Compile Include="ISettingsService.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="Shared\BindableBase.cs" />
