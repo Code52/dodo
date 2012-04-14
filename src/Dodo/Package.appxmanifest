@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Dodo.App">
-      <VisualElements DisplayName="Dodo" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Dodo" ForegroundText="light" BackgroundColor="#222222">
+      <VisualElements DisplayName="Dodo" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Dodo" ForegroundText="light" BackgroundColor="#067979">
         <DefaultTile ShowName="allLogos" />
         <SplashScreen Image="Assets\SplashScreen.png" />
       </VisualElements>
