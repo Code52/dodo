@@ -5,10 +5,11 @@ using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
 
-namespace BoxKite.Modules
+namespace BoxKite.Extensions
 {
     public static class WebResponseExtensions
     {
+        [Obsolete("HttpWebRequest is evil. Eeeeviiiiil")]
         public static IEnumerable<TOutput> MapTo<TResponse, TOutput>(this WebResponse response, Func<TResponse, IEnumerable<TOutput>> callback)
         {
             var resp = (HttpWebResponse)response;

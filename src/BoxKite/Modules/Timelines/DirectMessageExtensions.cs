@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using BoxKite.Extensions;
 using BoxKite.Models;
@@ -13,7 +14,7 @@ namespace BoxKite.Modules
 { 
     public static class DirectMessageExtensions
     {
-        private static Func<List<DM>, IEnumerable<DirectMessage>> callback = c => c.Select(o => new DirectMessage
+        static readonly Func<List<DM>, IEnumerable<DirectMessage>> Callback = c => c.Select(o => new DirectMessage
         {
             Text = o.text,
             Author = o.sender.name,
@@ -29,8 +30,7 @@ namespace BoxKite.Modules
                                      {"include_entities", "true"},
                                  };
             var req = session.AuthenticatedGet("direct_messages.json", parameters);
-            return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
-                             .SelectMany(a => a.MapTo(callback));
+            return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
 
         public static IObservable<DirectMessage> GetSentDirectMessages(this IUserSession session)
@@ -40,8 +40,7 @@ namespace BoxKite.Modules
                                      {"include_entities", "true"},
                                  };
             var req = session.AuthenticatedGet("direct_messages/sent.json", parameters);
-            return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
-                             .SelectMany(a => a.MapTo(callback));
+            return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
     }
 }

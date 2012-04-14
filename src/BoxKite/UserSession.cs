@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +12,11 @@ namespace BoxKite
 {
     public class UserSession : IUserSession
     {
+        // used http://garyshortblog.wordpress.com/2011/02/11/a-twitter-oauth-example-in-c/
+
         readonly TwitterCredentials _credentials;
+        readonly Func<string, string> _getFullUrl =
+            relativeUrl => string.Concat("https://api.twitter.com/1/", relativeUrl);
 
         const string OauthSignatureMethod = "HMAC-SHA1";
         const string OauthVersion = "1.0";
@@ -23,72 +26,41 @@ namespace BoxKite
             _credentials = credentials;
         }
 
-        public Task<Tweet> UpdateStatus(string text)
+        public Task<HttpResponseMessage> AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Tweet> Retweet(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Tweet> Reply(long id, string text)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebRequest AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters)
-        {
-            var url = "https://api.twitter.com/1/" + relativeUrl;
+            var url = _getFullUrl(relativeUrl);
             var querystring = parameters.Aggregate("", (current, entry) => current + (entry.Key + "=" + entry.Value + "&"));
             var oauth = BuildAuthenticatedResult(relativeUrl, parameters, "GET");
             var fullUrl = url;
 
+            var client = new HttpClient { MaxResponseContentBufferSize = 10 * 1024 * 1024 };
+            client.DefaultRequestHeaders.Add("Authorization", oauth.Header);
+
             if (!string.IsNullOrWhiteSpace(querystring))
-            {
                 fullUrl += "?" + querystring.Substring(0, querystring.Length - 1);
-            }
 
-            var hwr = (HttpWebRequest)WebRequest.Create(fullUrl);
-
-            hwr.Headers["Authorization"] = string.Format(
-                "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", oauth_timestamp=\"{2}\", oauth_consumer_key=\"{3}\", oauth_token=\"{4}\", oauth_signature=\"{5}\", oauth_version=\"{6}\"",
-                Uri.EscapeDataString(oauth.Nonce),
-                Uri.EscapeDataString(oauth.SignatureMethod),
-                Uri.EscapeDataString(oauth.Timestamp),
-                Uri.EscapeDataString(oauth.ConsumerKey),
-                Uri.EscapeDataString(oauth.Token),
-                Uri.EscapeDataString(oauth.SignatureString),
-                Uri.EscapeDataString(oauth.Version));
-
-            return hwr;
+            return client.GetAsync(fullUrl);
         }
 
         public Task<HttpResponseMessage> AuthenticatedPost(string relativeUrl, SortedDictionary<string, string> parameters)
         {
-
-            var url = "https://api.twitter.com/1/" + relativeUrl;
+            var url = _getFullUrl(relativeUrl);
             var oauth = BuildAuthenticatedResult(relativeUrl, parameters, "POST");
             var client = new HttpClient();
-            
-            var responseMessage = new HttpResponseMessage();
 
             client.DefaultRequestHeaders.Add("Authorization", oauth.Header);
 
-            string content = parameters.Aggregate(string.Empty, (current, e) => current + string.Format("{0}={1}&", e.Key, e.Value));
+            var content = parameters.Aggregate(string.Empty, (current, e) => current + string.Format("{0}={1}&", e.Key, e.Value));
             content.Substring(0, content.Length - 1);
 
             var data = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
-            //responseMessage = client.PostAsync(url, data).Result;
 
             return client.PostAsync(url, data);
-
         }
 
         private OAuth BuildAuthenticatedResult(string relativeUrl, IEnumerable<KeyValuePair<string, string>> parameters, string method)
         {
-            var url = "https://api.twitter.com/1/" + relativeUrl;
+            var url = _getFullUrl(relativeUrl);
 
             var oauthToken = _credentials.Token;
             var oauthConsumerKey = _credentials.ConsumerKey;
@@ -115,7 +87,7 @@ namespace BoxKite
 
             var baseString = method.ToUpper() + "&" + Uri.EscapeDataString(url) + "&";
 
-            if (method.ToUpper() == "GET")
+            if (method.Equals("GET", StringComparison.OrdinalIgnoreCase))
             {
                 foreach (var entry in parameters)
                 {
@@ -124,7 +96,7 @@ namespace BoxKite
                 }
             }
 
-            if (method.ToUpper() == "POST")
+            if (method.Equals("POST", StringComparison.OrdinalIgnoreCase))
             {
                 foreach (var entry in parameters)
                     sd.Add(entry.Key, entry.Value);
@@ -135,10 +107,6 @@ namespace BoxKite
                 baseString += Uri.EscapeDataString(entry.Key + "=" + entry.Value + "&");
             }
 
-           
-            //GS - Remove the trailing ambersand char, remember 
-            //it's been urlEncoded so you have to remove the 
-            //last 3 chars - %26
             baseString = baseString.Substring(0, baseString.Length - 3);
 
             var signingKey = Uri.EscapeDataString(_credentials.ConsumerSecret) + "&" + Uri.EscapeDataString(_credentials.TokenSecret);
@@ -149,12 +117,6 @@ namespace BoxKite
             var dataToBeSigned = CryptographicBuffer.ConvertStringToBinary(baseString, BinaryStringEncoding.Utf8);
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
-
-            var fullUrl = url;
-            if (!string.IsNullOrWhiteSpace(querystring))
-            {
-                fullUrl += "?" + querystring.Substring(0, querystring.Length - 1);
-            }
 
             return new OAuth
                        {

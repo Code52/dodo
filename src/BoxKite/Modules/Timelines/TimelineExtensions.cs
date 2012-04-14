@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
-using System.Threading.Tasks;
 using BoxKite.Extensions;
 using BoxKite.Models;
 
@@ -14,10 +12,10 @@ namespace BoxKite.Modules
 {
     public static class TimelineExtensions
     {
-        private static Func<List<Mention>, IEnumerable<Tweet>> callback = c => c.Select(o => new Tweet
+        static readonly Func<List<Mention>, IEnumerable<Tweet>> Callback = c => c.Select(o => new Tweet
                                                                                                  {
-                                                                                                     Text = o.text, 
-                                                                                                     Author = o.user.name, 
+                                                                                                     Text = o.text,
+                                                                                                     Author = o.user.name,
                                                                                                      Avatar = o.user.profile_image_url_https,
                                                                                                      Time = o.created_at.ParseDateTime()
                                                                                                  }).OrderByDescending(o => o.Time);
@@ -31,8 +29,7 @@ namespace BoxKite.Modules
                                      {"include_rts", "true"}
                                  };
             var req = session.AuthenticatedGet("statuses/mentions.json", parameters);
-            return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
-                             .SelectMany(a => a.MapTo(callback));
+            return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
 
         public static IObservable<Tweet> GetHomeTimeline(this IUserSession session)
@@ -44,8 +41,7 @@ namespace BoxKite.Modules
                                      {"include_rts", "true"}
                                  };
             var req = session.AuthenticatedGet("statuses/home_timeline.json", parameters);
-            return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
-                             .SelectMany(a => a.MapTo(callback));
+            return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
 
         public static IObservable<Tweet> GetRetweets(this IUserSession session)
@@ -56,8 +52,8 @@ namespace BoxKite.Modules
                                      {"include_entities", "true"},
                                  };
             var req = session.AuthenticatedGet("statuses/retweeted_to_me.json", parameters);
-            return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
-                             .SelectMany(a => a.MapTo(callback));
+            return req.ToObservable()
+                      .SelectMany(a => a.MapTo(Callback));
         }
 
         public static IObservable<Tweet> Tweet(this IUserSession session, string text)
@@ -66,9 +62,8 @@ namespace BoxKite.Modules
                                  {
                                      {"status", text},
                                  };
-
             var req = session.AuthenticatedPost("statuses/update.json", parameters);
-            return req.ToObservable().SelectMany(a => a.MapTo(callback));
+            return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
     }
 }

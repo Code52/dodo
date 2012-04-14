@@ -9,7 +9,7 @@ using Windows.Security.Authentication.Web;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 
-namespace BoxKite
+namespace BoxKite.Authentication
 {
     public class TwitterAuthenticator
     {

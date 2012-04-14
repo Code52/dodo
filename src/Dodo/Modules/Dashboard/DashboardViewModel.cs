@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using BoxKite;
+using BoxKite.Authentication;
 using BoxKite.Models;
 using BoxKite.Modules;
 using Dodo.Logic.Shared;
@@ -81,21 +82,21 @@ namespace Dodo.Modules.Dashboard
         {
             Tweets.Clear();
             _session.GetHomeTimeline()
-                    .Subscribe(OnNext);
+                    .Subscribe(OnNext, OnError);
         }
 
         private void GetRetweets()
         {
             Tweets.Clear();
             _session.GetRetweets()
-                    .Subscribe(OnNext);
+                    .Subscribe(OnNext, OnError);
         }
 
         private void GetMentions()
         {
             Tweets.Clear();
             _session.GetMentions()
-                    .Subscribe(OnNext);
+                    .Subscribe(OnNext, OnError);
         }
 
         private void GetDirectMessages()
@@ -103,12 +104,17 @@ namespace Dodo.Modules.Dashboard
             Tweets.Clear();
 
             _session.GetDirectMessages()
-                .Subscribe(OnNext);
+                .Subscribe(OnNext, OnError);
 
             _session.GetSentDirectMessages()
-                .Subscribe(OnNext);
+                .Subscribe(OnNext, OnError);
         }
 
+        private void OnError(Exception ex)
+        {
+            
+        }
+        
         private void OnNext(Tweet tweet)
         {
             _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, AddTweet, this, tweet);
