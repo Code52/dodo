@@ -1,4 +1,5 @@
 ﻿using System;
+using BoxKite.Extensions;
 
 namespace BoxKite.Models
 {
@@ -30,6 +31,11 @@ namespace BoxKite.Models
         {
             get { return _date; }
             set { SetProperty(ref _date, value); }
+        }
+
+        public string FriendlyTime
+        {
+            get { return Time.ToFriendlyText(); }
         }
     }
 }
