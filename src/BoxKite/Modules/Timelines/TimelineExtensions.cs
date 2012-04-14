@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using BoxKite.Extensions;
 using BoxKite.Models;
@@ -57,6 +58,17 @@ namespace BoxKite.Modules
             var req = session.AuthenticatedGet("statuses/retweeted_to_me.json", parameters);
             return Observable.FromAsync(() => Task.Factory.FromAsync<WebResponse>(req.BeginGetResponse, req.EndGetResponse, null))
                              .SelectMany(a => a.MapTo(callback));
+        }
+
+        public static IObservable<Tweet> Tweet(this IUserSession session, string text)
+        {
+            var parameters = new SortedDictionary<string, string>
+                                 {
+                                     {"status", text},
+                                 };
+
+            var req = session.AuthenticatedPost("statuses/update.json", parameters);
+            return req.ToObservable().SelectMany(a => a.MapTo(callback));
         }
     }
 }

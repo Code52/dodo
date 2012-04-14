@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using Newtonsoft.Json;
 
 namespace BoxKite.Modules
@@ -21,5 +22,12 @@ namespace BoxKite.Modules
             return callback(objects);
         }
 
+
+        public static IEnumerable<TOutput> MapTo<TResponse, TOutput>(this HttpResponseMessage response, Func<TResponse, IEnumerable<TOutput>> callback)
+        {
+            var content = response.Content.ReadAsStringAsync().Result;
+            var objects = JsonConvert.DeserializeObject<TResponse>(content);
+            return callback(objects);
+        }
     }
 }

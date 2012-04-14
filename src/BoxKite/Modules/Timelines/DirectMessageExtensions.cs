@@ -10,7 +10,7 @@ using BoxKite.Models;
 // ReSharper disable CheckNamespace
 namespace BoxKite.Modules
 // ReSharper restore CheckNamespace
-{
+{ 
     public static class DirectMessageExtensions
     {
         private static Func<List<DM>, IEnumerable<DirectMessage>> callback = c => c.Select(o => new DirectMessage
