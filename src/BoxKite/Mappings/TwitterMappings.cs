@@ -13,15 +13,14 @@ namespace BoxKite.Mappings
             var objects = JsonConvert.DeserializeObject<List<Mention>>(body);
 
             return objects.Select(o => new Tweet
-                                           {
-                                               Id = o.id_str,
-                                               Text = o.text,
-                                               Author = o.user.name,
-                                               Avatar = o.user.profile_image_url_https,
-                                               Time = o.created_at.ParseDateTime()
-                                           }).OrderByDescending(o => o.Time);
+            {
+                Id = o.id_str,
+                Text = o.text,
+                Author = o.user.name,
+                Avatar = o.user.profile_image_url_https,
+                Time = o.created_at.ToDateTimeOffset()
+            });
         }
-
 
         public static IEnumerable<Tweet> FromSearchResponse(this string body)
         {
@@ -33,6 +32,7 @@ namespace BoxKite.Mappings
                 Text = c.text,
                 Author = c.from_user,
                 Avatar = c.profile_image_url_https,
+                Time = c.created_at.ToDateTimeOffset()
             });
 
         }

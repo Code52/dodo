@@ -26,8 +26,8 @@ namespace BoxKite.Models
             set { SetProperty(ref _author, value); }
         }
 
-        private DateTime _date;
-        public DateTime Time
+        private DateTimeOffset _date;
+        public DateTimeOffset Time
         {
             get { return _date; }
             set { SetProperty(ref _date, value); }

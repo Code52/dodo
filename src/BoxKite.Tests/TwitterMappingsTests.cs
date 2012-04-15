@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using BoxKite.Extensions;
 using BoxKite.Mappings;
 using BoxKite.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,7 @@ namespace BoxKite.Tests
     [TestClass]
     public class TwitterMappingsTests : BaseContext
     {
-        readonly Func<Tweet, bool> _isDateTimeSet = t => t.Time != DateTime.MinValue;
+        readonly Func<Tweet, bool> _isDateTimeSet = t => t.Time != DateTimeOffset.MinValue;
 
         [TestMethod]
         public async void FromSearchResponse_UsingSampleData_CanBeParsed()
@@ -46,5 +47,14 @@ namespace BoxKite.Tests
 
             Assert.IsTrue(results.All(_isDateTimeSet));
         }
+
+        [TestMethod]
+        public void ParseDateTime_UsingValidTwitterTime_ReturnsResult()
+        {
+            var dateTime = "Sun Apr 15 02:31:50 +0000 2012".ToDateTimeOffset();
+
+            Assert.IsNotNull(dateTime);
+        }
+
     }
 }

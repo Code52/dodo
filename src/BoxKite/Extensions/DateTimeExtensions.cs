@@ -4,22 +4,22 @@ namespace BoxKite.Extensions
 {
     public static class DateTimeExtensions
     {
-        public static string ToShortTimeString(this DateTime date)
+        public static string ToShortTimeString(this DateTimeOffset date)
         {
             return string.Format("h:mm tt", date);
         }
 
-        public static string ToFriendlyText(this DateTime pastTime, string friendlyDistance)
+        public static string ToFriendlyText(this DateTimeOffset pastTime, string friendlyDistance)
         {
-            return ToFriendlyText(pastTime, DateTime.Now) + " " + friendlyDistance;
+            return ToFriendlyText(pastTime, DateTimeOffset.UtcNow) + " " + friendlyDistance;
         }
 
-        public static string ToFriendlyText(this DateTime pastTime)
+        public static string ToFriendlyText(this DateTimeOffset pastTime)
         {
-            return ToFriendlyText(pastTime, DateTime.Now);
+            return ToFriendlyText(pastTime, DateTimeOffset.UtcNow);
         }
 
-        public static string ToFriendlyText(this DateTime pastTime, DateTime currentTime)
+        public static string ToFriendlyText(this DateTimeOffset pastTime, DateTimeOffset currentTime)
         {
             var timeSince = currentTime - pastTime;
             if (timeSince > new TimeSpan(24, 0, 0))
@@ -52,7 +52,7 @@ namespace BoxKite.Extensions
             return pastTime.ToShortTimeString();
         }
 
-        public static string FormatDayOfMonth(this DateTime dateTime)
+        public static string FormatDayOfMonth(this DateTimeOffset dateTime)
         {
             var dayOfMonth = dateTime.Day;
 
