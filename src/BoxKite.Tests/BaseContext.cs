@@ -13,8 +13,7 @@ namespace BoxKite.Tests
             var file = await folder.GetFileAsync(filePath);
             var openFile = await file.OpenReadAsync();
             var reader = new StreamReader(WindowsRuntimeStreamExtensions.AsStreamForRead(openFile));
-            var contents = await reader.ReadToEndAsync();
-            return contents;
+            return  await reader.ReadToEndAsync();
         }
     }
 }

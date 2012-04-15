@@ -55,6 +55,5 @@ namespace BoxKite.Tests
 
             Assert.IsNotNull(dateTime);
         }
-
     }
 }
