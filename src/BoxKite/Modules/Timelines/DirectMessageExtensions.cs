@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
-using System.Threading.Tasks;
 using BoxKite.Extensions;
+using BoxKite.Mappings;
 using BoxKite.Models;
+using BoxKite.Models.Internal;
 
 // ReSharper disable CheckNamespace
 namespace BoxKite.Modules
@@ -17,8 +17,7 @@ namespace BoxKite.Modules
         static readonly Func<List<DM>, IEnumerable<DirectMessage>> Callback = c => c.Select(o => new DirectMessage
         {
             Text = o.text,
-            Author = o.sender.name,
-            Avatar = o.sender.profile_image_url_https,
+            User = o.sender.MapUser(),
             Recipient = o.recipient.name,
             Time = o.created_at.ParseDateTime()
         }).OrderByDescending(o => o.Time);
@@ -29,7 +28,7 @@ namespace BoxKite.Modules
                                  {
                                      {"include_entities", "true"},
                                  };
-            var req = session.AuthenticatedGet("direct_messages.json", parameters);
+            var req = session.GetAsync("direct_messages.json", parameters);
             return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
 
@@ -39,7 +38,7 @@ namespace BoxKite.Modules
                                  {
                                      {"include_entities", "true"},
                                  };
-            var req = session.AuthenticatedGet("direct_messages/sent.json", parameters);
+            var req = session.GetAsync("direct_messages/sent.json", parameters);
             return req.ToObservable().SelectMany(a => a.MapTo(Callback));
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Dodo.Logic
+﻿using BoxKite.Models;
+
+namespace Dodo.Logic
 {
     public interface ISettingsService
     {

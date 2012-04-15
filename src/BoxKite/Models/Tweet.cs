@@ -12,20 +12,6 @@ namespace BoxKite.Models
             set { SetProperty(ref _text, value); }
         }
 
-        private string _avatar;
-        public string Avatar
-        {
-            get { return _avatar; }
-            set { SetProperty(ref _avatar, value); }
-        }
-
-        private string _author;
-        public string Author
-        {
-            get { return _author; }
-            set { SetProperty(ref _author, value); }
-        }
-
         private DateTimeOffset _date;
         public DateTimeOffset Time
         {
@@ -42,7 +28,14 @@ namespace BoxKite.Models
         public string Id
         {
             get { return _id; }
-            set { SetProperty(ref _id , value); }
+            set { SetProperty(ref _id, value); }
+        }
+
+        private User _user;
+        public User User
+        {
+            get { return _user; }
+            set { SetProperty(ref _user, value); }
         }
     }
 }

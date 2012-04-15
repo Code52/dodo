@@ -21,15 +21,15 @@ namespace Dodo.Logic
 
         public T Get<T>(string key)
         {
-            var json = _appSettings.Values[key].ToString();
-            var obj = JsonConvert.DeserializeObject<T>(json);
-            return obj;
+            var jsonOutput = _appSettings.Values[key].ToString();
+            var content = JsonConvert.DeserializeObject<T>(jsonOutput);
+            return content;
         }
 
         public void Set<T>(string key, T value)
         {
-            var json = JsonConvert.SerializeObject(value);
-            _appSettings.Values[key] = json;
+            var jsonValue = JsonConvert.SerializeObject(value);
+            _appSettings.Values[key] = jsonValue;
         }
     }
 }

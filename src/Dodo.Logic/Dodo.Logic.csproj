@@ -117,6 +117,7 @@
     <Compile Include="Extensions\SettingsExtensions.cs" />
     <Compile Include="IDiagnosticService.cs" />
     <Compile Include="ISettingsService.cs" />
+    <Compile Include="SettingsExtensions.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="Shared\BindableBase.cs" />
     <Compile Include="Shared\DelegateCommand.cs" />

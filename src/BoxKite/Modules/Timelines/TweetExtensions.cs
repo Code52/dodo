@@ -2,45 +2,48 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoxKite.Extensions;
-using BoxKite.Models;
+using BoxKite.Mappings;
+using Tweet = BoxKite.Models.Internal.Tweet;
 
 namespace BoxKite.Modules.Timelines
 {
+    // TODO: upload image overload
+    // TODO: status with latitude/longitude
+     
     public static class TweetExtensions
     {
-        static readonly Func<Mention, Tweet> Callback = o => new Tweet
+        static readonly Func<Tweet, Models.Tweet> Callback = o => new Models.Tweet
         {
             Id = o.id_str,
             Text = o.text,
-            Author = o.user.name,
-            Avatar = o.user.profile_image_url_https,
+            User = o.user.MapUser(),
             Time = o.created_at.ParseDateTime()
         };
 
-        public async static Task<Tweet> Tweet(this IUserSession session, string text)
+        public async static Task<Models.Tweet> Tweet(this IUserSession session, string text)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
                                      {"status", text},
                                  };
-            var req = session.AuthenticatedPost("statuses/update.json", parameters);
+            var req = session.PostAsync("statuses/update.json", parameters);
             var response = await req;
             return response.MapTo(Callback);
         }
 
-        public async static Task<Tweet> Reply(this IUserSession session, Tweet tweet, string text)
+        public async static Task<Models.Tweet> Reply(this IUserSession session, Models.Tweet tweet, string text)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
                                      {"status", text},
                                      {"in_reply_to_status_id", tweet.Id}
                                  };
-            var req = session.AuthenticatedPost("statuses/update.json", parameters);
+            var req = session.PostAsync("statuses/update.json", parameters);
             var response = await req;
             return response.MapTo(Callback);
         }
 
-        public async static Task<Tweet> Retweet(this IUserSession session, Tweet tweet)
+        public async static Task<Models.Tweet> Retweet(this IUserSession session, Models.Tweet tweet)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
@@ -48,7 +51,7 @@ namespace BoxKite.Modules.Timelines
                                  };
             var path = string.Format("statuses/retweet/{0}.json", tweet.Id);
 
-            var req = session.AuthenticatedPost(path, parameters);
+            var req = session.PostAsync(path, parameters);
             var response = await req;
             return response.MapTo(Callback);
         }

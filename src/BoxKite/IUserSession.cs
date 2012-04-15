@@ -6,9 +6,8 @@ namespace BoxKite
 {
     public interface IUserSession
     {
-        // TODO: upload image overload
-        // TODO: status with latitude/longitude
-        Task<HttpResponseMessage> AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters);
-        Task<HttpResponseMessage> AuthenticatedPost(string relativeUrl, SortedDictionary<string, string> parameters);
+        Task<HttpResponseMessage> GetAsync(string relativeUrl, SortedDictionary<string, string> parameters);
+        Task<HttpResponseMessage> PostAsync(string relativeUrl, SortedDictionary<string, string> parameters);
+        HttpRequestMessage CreateGet(string fullUrl, SortedDictionary<string, string> parameters);
     }
 }

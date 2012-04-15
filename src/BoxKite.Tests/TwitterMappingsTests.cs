@@ -4,6 +4,7 @@ using BoxKite.Extensions;
 using BoxKite.Mappings;
 using BoxKite.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace BoxKite.Tests
 {
@@ -35,7 +36,7 @@ namespace BoxKite.Tests
         {
             var contents = await GetTestData(@"data\timeline.txt");
 
-            Assert.IsTrue(contents.FromTweet().Any());
+            Assert.IsTrue(contents.FromResponse().Any());
         }
 
         [TestMethod]
@@ -43,9 +44,21 @@ namespace BoxKite.Tests
         {
             var contents = await GetTestData(@"data\timeline.txt");
 
-            var results = contents.FromTweet();
+            var results = contents.FromResponse();
 
             Assert.IsTrue(results.All(_isDateTimeSet));
+        }
+
+        [TestMethod]
+        public async void Deserialize_SingleTweet_PopulatesFields()
+        {
+            var contents = await GetTestData(@"data\sampletweet.txt");
+
+            var tweet = contents.FromTweet();
+
+            Assert.IsTrue(tweet != null);
+            Assert.IsTrue(tweet.User != null);
+            Assert.IsTrue(tweet.Time != DateTimeOffset.MinValue);
         }
 
         [TestMethod]
@@ -53,7 +66,7 @@ namespace BoxKite.Tests
         {
             var dateTime = "Sun Apr 15 02:31:50 +0000 2012".ToDateTimeOffset();
 
-            Assert.AreNotEqual(DateTimeOffset.MinValue,dateTime);
+            Assert.AreNotEqual(DateTimeOffset.MinValue, dateTime);
         }
 
         [TestMethod]

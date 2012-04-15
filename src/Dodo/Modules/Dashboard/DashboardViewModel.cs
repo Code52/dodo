@@ -60,7 +60,6 @@ namespace Dodo.Modules.Dashboard
                         .SearchFor("twitter", pages: 5)
                         .Subscribe(OnNext);                
             }
-
         }
 
         private async void StartOAuthFlow()
@@ -84,8 +83,8 @@ namespace Dodo.Modules.Dashboard
         private void SetupApplication(object sender, InvokedHandlerArgs e)
         {
             Tweets.Clear();
-
             Tasks.Clear();
+
             Tasks.Add(new UserTask { Title = "Timeline", Command = new DelegateCommand(GetTimeline) });
             Tasks.Add(new UserTask { Title = "Mentions", Command = new DelegateCommand(GetMentions) });
             Tasks.Add(new UserTask { Title = "Retweets", Command = new DelegateCommand(GetRetweets) });
@@ -93,7 +92,22 @@ namespace Dodo.Modules.Dashboard
             Tasks.Add(new UserTask { Title = "New Followers" });
             Tasks.Add(new UserTask { Title = "Lost Followers" });
 
-            GetTimeline();
+            StartStreaming();
+        }
+
+        private async void StartStreaming()
+        {
+            Tweets.Clear();
+
+            var session = _getUserSession(_credentials);
+
+            session
+                .GetHomeTimeline()
+                .Subscribe(OnNext, OnError);
+            
+            var stream = await session.GetUserStream();
+            stream.Tweets.Subscribe(OnStreamed, OnError);
+            stream.Start();
         }
 
         private void GetTimeline()
@@ -147,6 +161,17 @@ namespace Dodo.Modules.Dashboard
         {
             var tweet = e.Context as Tweet;
             Tweets.Add(tweet);
+        }
+
+        private void OnStreamed(Tweet tweet)
+        {
+            _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, AddTweetFirst, this, tweet);
+        }
+
+        private void AddTweetFirst(object sender, InvokedHandlerArgs e)
+        {
+            var tweet = e.Context as Tweet;
+            Tweets.Insert(0, tweet);
         }
     }
 }

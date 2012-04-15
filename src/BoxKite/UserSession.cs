@@ -26,11 +26,11 @@ namespace BoxKite
             _credentials = credentials;
         }
 
-        public Task<HttpResponseMessage> AuthenticatedGet(string relativeUrl, SortedDictionary<string, string> parameters)
+        public Task<HttpResponseMessage> GetAsync(string relativeUrl, SortedDictionary<string, string> parameters)
         {
             var url = _getFullUrl(relativeUrl);
             var querystring = parameters.Aggregate("", (current, entry) => current + (entry.Key + "=" + entry.Value + "&"));
-            var oauth = BuildAuthenticatedResult(relativeUrl, parameters, "GET");
+            var oauth = BuildAuthenticatedResult(url, parameters, "GET");
             var fullUrl = url;
 
             var client = new HttpClient { MaxResponseContentBufferSize = 10 * 1024 * 1024 };
@@ -42,10 +42,10 @@ namespace BoxKite
             return client.GetAsync(fullUrl);
         }
 
-        public Task<HttpResponseMessage> AuthenticatedPost(string relativeUrl, SortedDictionary<string, string> parameters)
+        public Task<HttpResponseMessage> PostAsync(string relativeUrl, SortedDictionary<string, string> parameters)
         {
             var url = _getFullUrl(relativeUrl);
-            var oauth = BuildAuthenticatedResult(relativeUrl, parameters, "POST");
+            var oauth = BuildAuthenticatedResult(url, parameters, "POST");
             var client = new HttpClient();
 
             client.DefaultRequestHeaders.Add("Authorization", oauth.Header);
@@ -58,9 +58,26 @@ namespace BoxKite
             return client.PostAsync(url, data);
         }
 
-        private OAuth BuildAuthenticatedResult(string relativeUrl, IEnumerable<KeyValuePair<string, string>> parameters, string method)
+        public HttpRequestMessage CreateGet(string relativeUrl, SortedDictionary<string, string> parameters)
         {
-            var url = _getFullUrl(relativeUrl);
+            var url = "https://userstream.twitter.com/2/" + relativeUrl;
+
+            var querystring = parameters.Aggregate("", (current, entry) => current + (entry.Key + "=" + entry.Value + "&"));
+            var oauth = BuildAuthenticatedResult(url, parameters, "GET");
+            var fullUrl = url;
+
+            if (!string.IsNullOrWhiteSpace(querystring))
+                fullUrl += "?" + querystring.Substring(0, querystring.Length - 1);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+            request.Headers.Add("Authorization", oauth.Header);
+            request.Headers.Add("User-Agent", "dodo");
+            return request;
+        }
+
+        private OAuth BuildAuthenticatedResult(string fullUrl, IEnumerable<KeyValuePair<string, string>> parameters, string method)
+        {
+            var url = fullUrl;
 
             var oauthToken = _credentials.Token;
             var oauthConsumerKey = _credentials.ConsumerKey;
@@ -136,9 +153,7 @@ namespace BoxKite
                                         Uri.EscapeDataString(oauthToken),
                                         Uri.EscapeDataString(signatureString),
                                         Uri.EscapeDataString(OauthVersion))
-
                        };
-
         }
 
         private struct OAuth

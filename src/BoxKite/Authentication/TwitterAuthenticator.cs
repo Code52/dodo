@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BoxKite.Models;
 using Windows.Security.Authentication.Web;
@@ -16,7 +17,7 @@ namespace BoxKite.Authentication
         const string OauthSignatureMethod = "HMAC-SHA1";
         const string OauthVersion = "1.0";
 
-        private static String UrlEncode(String toEncode)
+        private static string UrlEncode(string toEncode)
         {
             var encoded = "";
 
@@ -45,12 +46,11 @@ namespace BoxKite.Authentication
         {
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create(url);
-                request.Method = "POST";
-                request.Headers["Authorization"] = data;
-                var response = (HttpWebResponse)await request.GetResponseAsync();
-                var responseDataStream = new StreamReader(response.GetResponseStream());
-                return responseDataStream.ReadToEnd();
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+                request.Headers.Add("Authorization", data);
+                var response = await client.SendAsync(request);
+                return response.Content.ReadAsStringAsync().Result;
             }
             catch (Exception)
             {
@@ -96,8 +96,8 @@ namespace BoxKite.Authentication
                     "OAuth oauth_callback=\"{0}\", oauth_consumer_key=\"{1}\", oauth_nonce=\"{2}\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"{3}\", oauth_version=\"1.0\", oauth_signature=\"{4}\"",
                     UrlEncode(twitterCallbackUrl),
                     twitterClientID,
-                    nonce, 
-                    sinceEpoch, 
+                    nonce,
+                    sinceEpoch,
                     UrlEncode(signature));
 
             var response = await PostData(twitterUrl, dataToPost);

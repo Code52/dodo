@@ -71,12 +71,12 @@
                         <Border Background="{StaticResource Something}" Width="60" Height="60" VerticalAlignment="Top">
                             <Image>
                                 <Image.Source>
-                                    <BitmapImage UriSource="{Binding Avatar}" />
+                                    <BitmapImage UriSource="{Binding User.Avatar}" />
                                 </Image.Source>
                             </Image>
                         </Border>
                         <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Top" Orientation="Vertical">
-                            <TextBlock Text="{Binding Author}"
+                            <TextBlock Text="{Binding User.Name}"
                                        Margin="0,-4,4,0"
                                        Style="{StaticResource TitleTextStyle}" 
                                        TextWrapping="NoWrap" 

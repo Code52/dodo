@@ -23,7 +23,6 @@ namespace BoxKite.Models
         public static TwitterCredentials Null
         {
             get { return _null; }
-            set { _null = value; }
         }
     }
 }
