@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
-using Dodo.Logic.Shared;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -28,13 +26,13 @@ namespace Dodo.Modules.Dashboard
             _storyboard.Begin();
 
             _viewModel = e.Parameter as DashboardViewModel;
-            _viewModel.Tweets.CollectionChanged += Tweets_CollectionChanged;
+            _viewModel.Tweets.CollectionChanged += TweetsCollectionChanged;
             _viewModel.Start();
 
             DataContext = _viewModel;
         }
 
-        void Tweets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        void TweetsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {

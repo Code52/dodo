@@ -8,3 +8,4 @@ _Resharper*
 msbuild.log
 *.cache
 artifacts/
+TestResults

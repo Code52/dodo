@@ -6,16 +6,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5C1CF862-B5E7-40D3-9BDB-BB2A0BA4623D}</ProjectGuid>
+    <ProjectGuid>{51A12A08-FC54-4AA6-A509-C5355CA0111A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoxKite</RootNamespace>
-    <AssemblyName>BoxKite</AssemblyName>
+    <RootNamespace>BoxKite.Tests</RootNamespace>
+    <AssemblyName>BoxKite.Tests</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <PackageCertificateKeyFile>BoxKite.Tests_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>1F39C78AC9D7B44C4BBB0E6D354BD2CAD75481F6</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -106,58 +106,57 @@
     <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <AppXPackage>True</AppXPackage>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Authentication\TwitterAuthenticator.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\WebResponseExtensions.cs" />
-    <Compile Include="IAnonymousSession.cs" />
-    <Compile Include="ITwitterService.cs" />
-    <Compile Include="IUserSession.cs" />
-    <Compile Include="Mappings\TwitterMappings.cs" />
-    <Compile Include="Models\PropertyChangedBase.cs" />
-    <Compile Include="Models\DirectMessage.cs" />
-    <Compile Include="Models\Models.cs" />
-    <Compile Include="Models\Tweet.cs" />
-    <Compile Include="Models\TwitterCredentials.cs" />
-    <Compile Include="Modules\Timelines\DirectMessageExtensions.cs" />
-    <Compile Include="Modules\Timelines\TimelineExtensions.cs" />
-    <Compile Include="Modules\Timelines\TweetExtensions.cs" />
+    <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
+    <SDKReference Include="MSTestFramework, Version=11.0" />
+    <SDKReference Include="TestPlatform, Version=11.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseContext.cs" />
+    <Compile Include="TwitterMappingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TwitterService.cs" />
-    <Compile Include="AnonymousSession.cs" />
-    <Compile Include="UserSession.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\winrt45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\packages\Rx-Core.2.0.20304-beta\lib\WinRT45\System.Reactive.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces">
-      <HintPath>..\packages\Rx-Interfaces.2.0.20304-beta\lib\WinRT45\System.Reactive.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq">
-      <HintPath>..\packages\Rx-Linq.2.0.20304-beta\lib\WinRT45\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices">
-      <HintPath>..\packages\Rx-PlatformServices.2.0.20304-beta\lib\WinRT45\System.Reactive.PlatformServices.dll</HintPath>
-    </Reference>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="data\searchresponse.txt" />
+    <Content Include="data\timeline.txt" />
+    <Content Include="Images\UnitTestLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestSmallLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestSplashScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestStoreLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BoxKite.Tests_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BoxKite\BoxKite.csproj">
+      <Project>{5C1CF862-B5E7-40D3-9BDB-BB2A0BA4623D}</Project>
+      <Name>BoxKite</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>
+  </Target>  
   <Target Name="AfterBuild">
   </Target>
   -->

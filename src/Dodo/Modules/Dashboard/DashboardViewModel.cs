@@ -13,13 +13,13 @@ namespace Dodo.Modules.Dashboard
     public class DashboardViewModel : BindableBase
     {
         readonly Func<IAnonymousSession> _getAnonymousSession;
-        readonly Func<IUserSession> _getUserSession;
+        readonly Func<TwitterCredentials, IUserSession> _getUserSession;
         readonly IDiagnosticService _diagnostics;
         readonly CoreDispatcher _dispatcher;
 
         public DashboardViewModel(
             Func<IAnonymousSession> getAnonymousSession,
-            Func<IUserSession> getUserSession,
+            Func<TwitterCredentials,IUserSession> getUserSession,
             IDiagnosticService diagnostics,
             CoreDispatcher dispatcher)
         {
@@ -63,10 +63,6 @@ namespace Dodo.Modules.Dashboard
 
             // TODO: save credentials to store
 
-            
-
-            // _session = _twitter.GetUserSession(_credentials);
-
             _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
         }
 
@@ -90,7 +86,7 @@ namespace Dodo.Modules.Dashboard
         private void GetTimeline()
         {
             Tweets.Clear();
-            _getUserSession()
+            _getUserSession(_credentials)
                 .GetHomeTimeline()
                 .Subscribe(OnNext, OnError);
         }
@@ -98,7 +94,7 @@ namespace Dodo.Modules.Dashboard
         private void GetRetweets()
         {
             Tweets.Clear();
-            _getUserSession()
+            _getUserSession(_credentials)
                 .GetRetweets()
                 .Subscribe(OnNext, OnError);
         }
@@ -106,7 +102,7 @@ namespace Dodo.Modules.Dashboard
         private void GetMentions()
         {
             Tweets.Clear();
-            _getUserSession()
+            _getUserSession(_credentials)
                 .GetMentions()
                 .Subscribe(OnNext, OnError);
         }
@@ -115,11 +111,11 @@ namespace Dodo.Modules.Dashboard
         {
             Tweets.Clear();
 
-            _getUserSession()
+            _getUserSession(_credentials)
                 .GetDirectMessages()
                 .Subscribe(OnNext, OnError);
 
-            _getUserSession()
+            _getUserSession(_credentials)
                 .GetSentDirectMessages()
                 .Subscribe(OnNext, OnError);
         }
