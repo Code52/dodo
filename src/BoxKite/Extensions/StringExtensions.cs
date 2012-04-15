@@ -40,7 +40,7 @@ namespace BoxKite.Extensions
                 return timestamp;
             }
 
-            return timestamp;
+            return DateTimeOffset.MinValue;
         }
     }
 }

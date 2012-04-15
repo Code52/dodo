@@ -53,7 +53,15 @@ namespace BoxKite.Tests
         {
             var dateTime = "Sun Apr 15 02:31:50 +0000 2012".ToDateTimeOffset();
 
-            Assert.IsNotNull(dateTime);
+            Assert.AreNotEqual(DateTimeOffset.MinValue,dateTime);
+        }
+
+        [TestMethod]
+        public void ParseDateTime_UsingValidTime_ReturnsResult()
+        {
+            var dateTime = "Sun, 15 Apr 2012 02:31:50 +0000".ToDateTimeOffset();
+
+            Assert.AreNotEqual(DateTimeOffset.MinValue, dateTime);
         }
     }
 }
