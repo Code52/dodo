@@ -23,8 +23,17 @@
             <SolidColorBrush x:Key="AlternativeBackground">#F7E967</SolidColorBrush>
             <SolidColorBrush x:Key="Something">#A9CF54</SolidColorBrush>
             <SolidColorBrush x:Key="SomethingElse">#588F27</SolidColorBrush>
+            
+            <!-- Fonts for making tweets look better -->
 
-            <x:String x:Key="AppName">Dodo</x:String>
+            <FontFamily x:Key="Emoticon">
+                /Dodo;component/Assets/#Emoticons standard
+            </FontFamily>
+            <FontFamily x:Key="WebSymbols">
+                /Dodo;component/Assets/#Web Symbols
+            </FontFamily>
+
+            <x:String x:Key="AppName"></x:String>
             <DataTemplate x:Key="MenuItemTemplate">
                 <Grid Height="60" Margin="10">
                     <Grid.ColumnDefinitions>
