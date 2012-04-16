@@ -5,6 +5,7 @@ using BoxKite.Authentication;
 using BoxKite.Models;
 using BoxKite.Modules;
 using Dodo.Logic;
+using Dodo.Logic.Extensions;
 using Dodo.Logic.Shared;
 using Windows.UI.Core;
 
@@ -15,12 +16,14 @@ namespace Dodo.Modules.Dashboard
         readonly Func<IAnonymousSession> _getAnonymousSession;
         readonly Func<TwitterCredentials, IUserSession> _getUserSession;
         readonly IDiagnosticService _diagnostics;
+        readonly ISettingsService _settings;
         readonly CoreDispatcher _dispatcher;
 
         public DashboardViewModel(
             Func<IAnonymousSession> getAnonymousSession,
             Func<TwitterCredentials,IUserSession> getUserSession,
             IDiagnosticService diagnostics,
+            ISettingsService settings,
             CoreDispatcher dispatcher)
         {
             _getAnonymousSession = getAnonymousSession;
@@ -43,11 +46,20 @@ namespace Dodo.Modules.Dashboard
 
         public void Start()
         {
-            _tasks.Add(new UserTask { Title = "Sign In", Command = new DelegateCommand(StartOAuthFlow) });
+            if (_settings.HasUserSettings())
+            {
+                _credentials = _settings.GetUserCredentials();
+                _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
+            }
+            else
+            {
+                _tasks.Add(new UserTask { Title = "Sign In", Command = new DelegateCommand(StartOAuthFlow) });
 
-            _getAnonymousSession()
-                    .SearchFor("twitter", pages: 5)
-                    .Subscribe(OnNext);
+                _getAnonymousSession()
+                        .SearchFor("twitter", pages: 5)
+                        .Subscribe(OnNext);                
+            }
+
         }
 
         private async void StartOAuthFlow()
@@ -61,7 +73,7 @@ namespace Dodo.Modules.Dashboard
             if (!_credentials.Valid)
                 return;
 
-            // TODO: save credentials to store
+            _settings.StoreUserCredentials(_credentials);
 
             _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
         }

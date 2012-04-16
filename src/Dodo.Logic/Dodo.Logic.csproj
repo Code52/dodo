@@ -114,6 +114,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\SettingsExtensions.cs" />
     <Compile Include="IDiagnosticService.cs" />
     <Compile Include="ISettingsService.cs" />
     <Compile Include="SettingsService.cs" />
