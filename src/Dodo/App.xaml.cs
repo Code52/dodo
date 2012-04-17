@@ -73,6 +73,7 @@ namespace Dodo
             builder.RegisterType<AnonymousSession>().AsImplementedInterfaces();
             builder.RegisterType<UserSession>().AsImplementedInterfaces();
             builder.RegisterType<DiagnosticService>().AsImplementedInterfaces();
+            builder.RegisterType<SettingsService>().AsImplementedInterfaces();
             builder.RegisterInstance(Window.Current.Dispatcher).As<CoreDispatcher>();
 
             return builder.Build();

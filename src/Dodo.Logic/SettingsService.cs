@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Windows.Storage;
 
 namespace Dodo.Logic
@@ -10,7 +11,7 @@ namespace Dodo.Logic
         {
             var data = ApplicationData.Current.LocalSettings;
 
-            _appSettings = data.CreateContainer("Settings", ApplicationDataCreateDisposition.Existing);
+            _appSettings = data.CreateContainer("Settings", ApplicationDataCreateDisposition.Always);
         }
 
         public bool ContainsKey(string key)
@@ -20,12 +21,15 @@ namespace Dodo.Logic
 
         public T Get<T>(string key)
         {
-            return (T)_appSettings.Values[key];
+            var json = _appSettings.Values[key].ToString();
+            var obj = JsonConvert.DeserializeObject<T>(json);
+            return obj;
         }
 
         public void Set<T>(string key, T value)
         {
-            _appSettings.Values[key] = value;
+            var json = JsonConvert.SerializeObject(value);
+            _appSettings.Values[key] = json;
         }
     }
 }

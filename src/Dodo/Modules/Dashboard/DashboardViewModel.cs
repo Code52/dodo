@@ -29,6 +29,7 @@ namespace Dodo.Modules.Dashboard
             _getAnonymousSession = getAnonymousSession;
             _getUserSession = getUserSession;
             _diagnostics = diagnostics;
+            _settings = settings;
             _dispatcher = dispatcher;
         }
 
