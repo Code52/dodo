@@ -1,0 +1,151 @@
+﻿{
+  "geo": null,
+  "retweeted": false,
+  "text": "RT @WilderMinds: If you're a follower of AgiliTrain. I am here to announce that we're now Wilder Minds!",
+  "truncated": false,
+  "created_at": "Sat Apr 21 09:10:11 +0000 2012",
+  "in_reply_to_status_id_str": null,
+  "coordinates": null,
+  "source": "\u003Ca href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E",
+  "in_reply_to_user_id_str": null,
+  "favorited": false,
+  "contributors": null,
+  "entities": {
+    "urls": [
+      
+    ],
+    "user_mentions": [
+      {
+        "indices": [
+          3,
+          15
+        ],
+        "screen_name": "WilderMinds",
+        "name": "Wilder Minds",
+        "id": 43766799,
+        "id_str": "43766799"
+      }
+    ],
+    "hashtags": [
+      
+    ]
+  },
+  "place": null,
+  "in_reply_to_screen_name": null,
+  "in_reply_to_user_id": null,
+  "user": {
+    "profile_background_image_url_https": "https:\/\/si0.twimg.com\/images\/themes\/theme14\/bg.gif",
+    "profile_sidebar_fill_color": "efefef",
+    "listed_count": 230,
+    "time_zone": "Madrid",
+    "created_at": "Sun Aug 10 11:15:55 +0000 2008",
+    "profile_sidebar_border_color": "eeeeee",
+    "verified": false,
+    "url": "http:\/\/hadihariri.com",
+    "description": "Developer & Technical Evangelist at JetBrains",
+    "default_profile": false,
+    "profile_use_background_image": true,
+    "is_translator": false,
+    "contributors_enabled": false,
+    "geo_enabled": false,
+    "notifications": null,
+    "profile_text_color": "333333",
+    "profile_image_url_https": "https:\/\/si0.twimg.com\/profile_images\/2058273045\/new__1__normal.png",
+    "profile_background_image_url": "http:\/\/a0.twimg.com\/images\/themes\/theme14\/bg.gif",
+    "followers_count": 3540,
+    "profile_image_url": "http:\/\/a0.twimg.com\/profile_images\/2058273045\/new__1__normal.png",
+    "location": "Malaga, Spain",
+    "lang": "en",
+    "profile_link_color": "009999",
+    "protected": false,
+    "screen_name": "hhariri",
+    "default_profile_image": false,
+    "show_all_inline_media": true,
+    "friends_count": 342,
+    "name": "Hadi Hariri",
+    "statuses_count": 38625,
+    "favourites_count": 2,
+    "profile_background_color": "131516",
+    "id": 15797140,
+    "id_str": "15797140",
+    "follow_request_sent": null,
+    "following": null,
+    "profile_background_tile": true,
+    "utc_offset": 3600
+  },
+  "id": 193627683341611008,
+  "id_str": "193627683341611008",
+  "retweeted_status": {
+    "geo": null,
+    "retweeted": false,
+    "text": "If you're a follower of AgiliTrain. I am here to announce that we're now Wilder Minds!",
+    "truncated": false,
+    "created_at": "Sat Apr 21 09:08:45 +0000 2012",
+    "in_reply_to_status_id_str": null,
+    "coordinates": null,
+    "source": "\u003Ca href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E",
+    "in_reply_to_user_id_str": null,
+    "favorited": false,
+    "contributors": null,
+    "entities": {
+      "urls": [
+        
+      ],
+      "user_mentions": [
+        
+      ],
+      "hashtags": [
+        
+      ]
+    },
+    "place": null,
+    "in_reply_to_screen_name": null,
+    "in_reply_to_user_id": null,
+    "user": {
+      "profile_background_image_url_https": "https:\/\/si0.twimg.com\/profile_background_images\/531766193\/feature-slide-1.jpg",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "listed_count": 7,
+      "time_zone": "Eastern Time (US & Canada)",
+      "created_at": "Sun May 31 22:12:59 +0000 2009",
+      "profile_sidebar_border_color": "C0DEED",
+      "verified": false,
+      "url": "http:\/\/www.wilderminds.com",
+      "description": "The Wilder Minds are a small group of experts, trainers and thought leaders helping companies get up to speed with the newest technologies.",
+      "default_profile": false,
+      "profile_use_background_image": true,
+      "is_translator": false,
+      "contributors_enabled": false,
+      "geo_enabled": true,
+      "notifications": null,
+      "profile_text_color": "333333",
+      "profile_image_url_https": "https:\/\/si0.twimg.com\/profile_images\/2152761933\/squareBubble_normal.png",
+      "profile_background_image_url": "http:\/\/a0.twimg.com\/profile_background_images\/531766193\/feature-slide-1.jpg",
+      "followers_count": 117,
+      "profile_image_url": "http:\/\/a0.twimg.com\/profile_images\/2152761933\/squareBubble_normal.png",
+      "location": "Atlanta, GA",
+      "lang": "en",
+      "profile_link_color": "F15B27",
+      "protected": false,
+      "screen_name": "WilderMinds",
+      "default_profile_image": false,
+      "show_all_inline_media": false,
+      "friends_count": 55,
+      "name": "Wilder Minds",
+      "statuses_count": 224,
+      "favourites_count": 0,
+      "profile_background_color": "ffffff",
+      "id": 43766799,
+      "id_str": "43766799",
+      "follow_request_sent": null,
+      "following": null,
+      "profile_background_tile": false,
+      "utc_offset": -18000
+    },
+    "id": 193627323386433536,
+    "id_str": "193627323386433536",
+    "retweet_count": 1,
+    "in_reply_to_status_id": null
+  },
+  "retweet_count": 1,
+  "in_reply_to_status_id": null
+}

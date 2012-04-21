@@ -37,5 +37,12 @@ namespace BoxKite.Models
             get { return _user; }
             set { SetProperty(ref _user, value); }
         }
+
+        private User _retweetedBy;
+        public User RetweetedBy
+        {
+            get { return _retweetedBy; }
+            set { SetProperty(ref _retweetedBy, value); }
+        }
     }
 }

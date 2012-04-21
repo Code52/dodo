@@ -125,6 +125,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\retweet.txt" />
     <Content Include="data\sampletweet.txt" />
     <Content Include="data\searchresponse.txt" />
     <Content Include="data\timeline.txt" />

@@ -27,13 +27,26 @@ namespace BoxKite.Mappings
         {
             var o = JsonConvert.DeserializeObject<Tweet>(body);
 
-            return new Models.Tweet
+            if (o.retweeted_status != null)
             {
-                Id = o.id_str,
-                Text = o.text,
-                User = MapUser(o.user),
-                Time = o.created_at.ToDateTimeOffset()
-            };
+                var status = o.retweeted_status;
+                return new Models.Tweet
+                {
+                    Id = status.id_str,
+                    Text = status.text,
+                    User = MapUser(status.user),
+                    RetweetedBy = MapUser(o.user),
+                    Time = status.created_at.ToDateTimeOffset()
+                };
+            }
+
+            return new Models.Tweet
+                       {
+                           Id = o.id_str,
+                           Text = o.text,
+                           User = MapUser(o.user),
+                           Time = o.created_at.ToDateTimeOffset()
+                       };
         }
 
         public static IEnumerable<Models.Tweet> FromSearchResponse(this string body)

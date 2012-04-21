@@ -62,6 +62,19 @@ namespace BoxKite.Tests
         }
 
         [TestMethod]
+        public async void Deserialize_Retweet_PopulatesFields()
+        {
+            // @hhariri retweets @wilderminds
+            var contents = await GetTestData(@"data\retweet.txt");
+
+            var tweet = contents.FromTweet();
+
+            Assert.IsTrue(tweet != null);
+            Assert.IsTrue(tweet.User.Name == "WilderMinds");
+            Assert.IsTrue(tweet.RetweetedBy.Name == "hhariri");
+        }
+
+        [TestMethod]
         public void ParseDateTime_UsingValidTwitterTime_ReturnsResult()
         {
             var dateTime = "Sun Apr 15 02:31:50 +0000 2012".ToDateTimeOffset();

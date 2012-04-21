@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BoxKite.Modules.Streaming;
@@ -11,13 +12,16 @@ namespace BoxKite.Modules
     {
         public static async Task<IUserStream> GetUserStream(this IUserSession session)
         {
-            var parameters = new SortedDictionary<string, string>();
-            var request = session.CreateGet(@"user.json", parameters);
-            var c = new HttpClient();
+            Func<Task<HttpResponseMessage>> startConnection =
+                () =>
+                {
+                    var parameters = new SortedDictionary<string, string>();
+                    var request = session.CreateGet(@"user.json", parameters);
+                    var c = new HttpClient();
+                    return c.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                };
 
-            var response = await c.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            var stream = await response.Content.ReadAsStreamAsync();
-            return new UserStream(stream);
+            return new UserStream(startConnection);
         }
     }
 }

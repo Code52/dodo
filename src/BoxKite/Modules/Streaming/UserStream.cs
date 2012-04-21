@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using BoxKite.Mappings;
@@ -10,19 +12,47 @@ namespace BoxKite.Modules.Streaming
 {
     public class UserStream : IUserStream
     {
-        readonly Stream _stream;
+        readonly Func<Task<HttpResponseMessage>> _createOpenConnection;
         readonly Subject<Tweet> _tweets = new Subject<Tweet>();
         readonly Subject<long> _friends = new Subject<long>();
-        bool _isActive = true;
+        readonly TimeSpan InitialDelay = TimeSpan.FromSeconds(20);
 
-        public UserStream(Stream dataSource)
+        bool _isActive = true;
+        TimeSpan _delay = TimeSpan.FromSeconds(20);
+
+        public UserStream(Func<Task<HttpResponseMessage>> createOpenConnection)
         {
-            _stream = dataSource;
+            _createOpenConnection = createOpenConnection;
         }
 
         public void Start()
         {
-            Task.Factory.StartNew(ProcessMessages);
+            Task.Factory.StartNew(ProcessMessages)
+                .ContinueWith(HandleExceptionsIfRaised);
+        }
+
+        private void HandleExceptionsIfRaised(Task obj)
+        {
+            if (obj.Exception != null)
+            {
+                SendToAllSubscribers(obj.Exception);
+            }
+
+            if (obj.IsFaulted)
+            {
+                SendToAllSubscribers(new Exception("Stream is faulted"));
+            }
+
+            if (obj.IsCanceled)
+            {
+                SendToAllSubscribers(new Exception("Stream is cancelled"));
+            }
+        }
+
+        private void SendToAllSubscribers(Exception exception)
+        {
+            _tweets.OnError(exception);
+            _friends.OnError(exception);
         }
 
         public void Stop()
@@ -34,13 +64,42 @@ namespace BoxKite.Modules.Streaming
 
         public IObservable<long> Friends { get { return _friends; } }
 
-        private void ProcessMessages()
+        private async void ProcessMessages()
         {
-            var responseStream = new StreamReader(_stream);
+            var responseStream = await GetStream();
             while (_isActive)
             {
-                var line = responseStream.ReadLine();
+                // reconnect if the stream was closed previously
+                if (responseStream == null)
+                {
+                    await Task.Delay(_delay);
+                    responseStream = await GetStream();
+                }
+
+                string line;
+                try
+                {
+                    line = responseStream.ReadLine();
+                }
+                catch (IOException)
+                {
+                    _delay += InitialDelay;
+                    responseStream.Dispose();
+                    responseStream = null;
+                    line = "";
+                }
+
+                if (_delay.TotalMinutes <= 2)
+                {
+                    // TODO: give up
+                }
+
                 if (String.IsNullOrEmpty(line)) continue;
+
+                Debug.WriteLine(line);
+
+                // we have a valid connection - clear delay
+                _delay = TimeSpan.Zero;
 
                 var obj = JsonConvert.DeserializeObject<dynamic>(line);
 
@@ -62,6 +121,15 @@ namespace BoxKite.Modules.Streaming
                     _tweets.OnNext(tweet);
                 }
             }
+        }
+
+        private async Task<StreamReader> GetStream()
+        {
+            var response = await _createOpenConnection();
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            var responseStream = new StreamReader(stream);
+            return responseStream;
         }
 
         private void SendFriendsMessage(dynamic obj)

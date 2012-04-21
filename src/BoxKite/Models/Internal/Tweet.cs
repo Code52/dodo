@@ -22,6 +22,7 @@ namespace BoxKite.Models.Internal
         public Entities entities { get; set; }
         public bool favorited { get; set; }
         public bool retweeted { get; set; }
+        public Tweet retweeted_status { get; set; }
         public bool? possibly_sensitive { get; set; }
     }
 }
