@@ -55,7 +55,7 @@ namespace Dodo.Modules.Dashboard
 
         private void ExecuteInBackground(Action action)
         {
-            _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, (s, e) => action(), this, null);
+            _dispatcher.RunAsync(CoreDispatcherPriority.Low, new DispatchedHandler(action));
         }
     }
 }
