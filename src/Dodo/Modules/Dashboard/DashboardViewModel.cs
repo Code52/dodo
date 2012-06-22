@@ -50,7 +50,7 @@ namespace Dodo.Modules.Dashboard
             if (_settings.HasUserSettings())
             {
                 _credentials = _settings.GetUserCredentials();
-                _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
+                _dispatcher.RunAsync(CoreDispatcherPriority.Low, SetupApplication);
             }
             else
             {
@@ -75,12 +75,12 @@ namespace Dodo.Modules.Dashboard
 
             _settings.StoreUserCredentials(_credentials);
 
-            _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, SetupApplication, this, null);
+            _dispatcher.RunAsync(CoreDispatcherPriority.Low, SetupApplication);
         }
 
         private TwitterCredentials _credentials;
 
-        private void SetupApplication(object sender, InvokedHandlerArgs e)
+        private void SetupApplication()
         {
             Tweets.Clear();
             Tasks.Clear();
@@ -154,23 +154,21 @@ namespace Dodo.Modules.Dashboard
         
         private void OnNext(Tweet tweet)
         {
-            _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, AddTweet, this, tweet);
+            _dispatcher.RunAsync(CoreDispatcherPriority.Low, () => AddTweet(tweet));
         }
 
-        private void AddTweet(object sender, InvokedHandlerArgs e)
+        private void AddTweet(Tweet tweet)
         {
-            var tweet = e.Context as Tweet;
             Tweets.Add(tweet);
         }
 
         private void OnStreamed(Tweet tweet)
         {
-            _dispatcher.InvokeAsync(CoreDispatcherPriority.Low, AddTweetFirst, this, tweet);
+            _dispatcher.RunAsync(CoreDispatcherPriority.Low, () => AddTweetFirst(tweet));
         }
 
-        private void AddTweetFirst(object sender, InvokedHandlerArgs e)
+        private void AddTweetFirst(Tweet tweet)
         {
-            var tweet = e.Context as Tweet;
             Tweets.Insert(0, tweet);
         }
     }
